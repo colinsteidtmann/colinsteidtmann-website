@@ -9,5 +9,11 @@ export async function getStaticProps() {
 
 export default function About({ code }) {
     const Content = useMemo(() => getMDXComponent(code), [code]);
-    return <Content />;
+    return (
+        <>
+            <div className="prose">
+                <Content />
+            </div>
+        </>
+    );
 }
