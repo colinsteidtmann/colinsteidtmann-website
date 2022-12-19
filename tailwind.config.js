@@ -10,7 +10,8 @@ module.exports = {
     './content/**/*.mdx',
   ],
   theme: {
-    extend: {},
+    extend: {
+    },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
 };
