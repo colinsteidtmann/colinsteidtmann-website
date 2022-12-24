@@ -1,21 +1,21 @@
-import { useMemo } from "react";
-import { getMDXComponent } from "mdx-bundler/client";
+import MdxRenderer from "../components/MdxRenderer";
 import { getFileBySlug } from "../lib/mdx";
 
+const type = "author";
+const slug = "about";
 export async function getStaticProps() {
-    const { code, frontMatter } = await getFileBySlug('author', "about");
-    return { props: { code, frontMatter } };
+    const { metadata } = getFileBySlug(type, slug);
+    return { props: { metadata } };
 }
 
-export default function About({ code, frontMatter }) {
-    const { title, date, tags, lastmod } = frontMatter;
-    const Content = useMemo(() => getMDXComponent(code), [code]);
+export default function About({ metadata }) {
+    const { title, date, tags, lastmod } = metadata;
     return (
         <>
             <div className="prose mx-auto mt-8">
                 <h1>{title}</h1>
                 <time dateTime={date} className="italic">Last updated {lastmod}</time>
-                <Content />
+                <MdxRenderer metadata={metadata} />
             </div>
         </>
     );

@@ -1,0 +1,221 @@
+---
+title: Setting up my website for 2023
+date: 12/19/2022
+lastmod: 12/19/2022
+tags: []
+draft: true
+---
+
+Since my fall semester at UC Berkeley just ended, I thought what better time than now to redo my personal website. The last iteration of it was done nearly four years ago (also the last time I updated it 😬)! Going forwards, I want my website to be easier and more inviting to add to. This is what my website looked like in 2019 (source - [Wayback Machine](https://web.archive.org/web/20210909202641/https://colinsteidtmann.com/):
+![screenshot of my website from 2019](notes/website-setup-2023/2019-website.png)
+
+So, how should I rebuild it? I could use pay for a site from Squarespace, Wix, or Wordpress, but then I'd be limited in ownership and creative freedom, and I wouldbe paying 10x what I pay now ($12/year). A week ago I stumbled across [MDX](https://mdxjs.com/), aka [Markdown](https://www.markdownguide.org/) with the ability to interweave JavaScript
+in it. Markdown is a very friendly way to write and much more inviting to me, eg. I can write headers with `# Header` or italics with `*word*` instead of `<h1>Header</h1>` and `<em>word</em>`.Now, I'll write the steps I followed to set-up this site,
+it uses NextJS, TailwindCSS, and MDX. Here's the high-level overview:
+
+1. Install [NextJS](https://nextjs.org/)
+2. Install [TailwindCSS](https://tailwindcss.com/)
+3. Install [mdx-bundler](https://github.com/kentcdodds/mdx-bundler)
+4. Do a bit of programming to set things up and look at other [projects](https://github.com/timlrx/tailwind-nextjs-starter-blog) for inspiration.
+
+Now let's hop into some actual code.
+
+## Installing things
+
+Install NextJS. NextJs is a _framework_ for ReactJS, and ReactJS is a _library_ for JavaScript. React has a library of `functions()` to manipulate HTML and make pages more interactive and fun to use. NextJS then frameworks those functions in a way that helps developers create faster and better programmed websites.
+
+```
+yarn create next-app website-name
+```
+
+Next install TailwindCSS. TailwindCSS is a CSS _framework_ helps you apply a consistent style to your website but one that you'll still have full control of. Run the command below and then follow their specific [NextJS steps](https://tailwindcss.com/docs/guides/nextjs). (I included `@tailwindcss/typography` b/c we need that to style the markdown and `@tailwindcss/forms` b/c it might come in handy 🤷)
+
+```
+yarn add --dev tailwindcss postcss autoprefixer @tailwindcss/typography @tailwindcss/forms
+```
+
+The website part is done, let's now integrate MDX. We'll use mdx-bundler to _compile_ and _bundle_ the markdown/mdx files. Compiling will turn the markdown files into something parsable by browsers (HTML). Bundling will bundle together the JavaScript functions that MDX files can import from libraries or interweave in the content. Install mdx-bundler and it's dependencies (I included `gray-matter` b/c it will help in a following step):
+
+```
+yarn add mdx-bundler esbuild gray-matter
+```
+
+## Do some programming
+
+Your project tree should look like this:
+
+```
+|--your-website-name
+    |-pages
+        |(...)
+        |-index.js
+    |-public
+    |-styles
+    |(...)
+    |-tailwind.config.js
+```
+
+Now let's create a `content` directory to hold the MDX files and a `lib` and `lib/utils` directory to write the mdx helper code.
+Inside `lib/utils` create `files.js` which will export a function that let's us iterate over all the mdx files in `content`:
+
+```
+// lib/utils/files.js
+import fs from 'fs';
+import path from 'path';
+
+const pipe =
+    (...fns) =>
+        (x) =>
+            fns.reduce((v, f) => f(v), x);
+
+const flattenArray = (input) =>
+    input.reduce((acc, item) => [...acc, ...(Array.isArray(item) ? item : [item])], []);
+
+const map = (fn) => (input) => input.map(fn);
+
+const walkDir = (fullPath) => {
+    return fs.statSync(fullPath).isFile() ? fullPath : getAllFilesRecursively(fullPath);
+};
+
+const pathJoinPrefix = (prefix) => (extraPath) => path.join(prefix, extraPath);
+
+const getAllFilesRecursively = (folder) =>
+    pipe(fs.readdirSync, map(pipe(pathJoinPrefix(folder), walkDir)), flattenArray)(folder);
+
+export default getAllFilesRecursively;
+```
+
+Next, inside `lib`, create `mdx.js` which will contain functions that use `mdx-bundler` to compile and bundle the the mdx files and returns HTML+_[frontmatter](https://jekyllrb.com/docs/front-matter/)_ (metadata we can include in the mdx files, e.g. date it was written):
+
+```
+// lib/mdx.js
+import { bundleMDX } from "mdx-bundler";
+import matter from "gray-matter";
+import fs from "fs";
+import path from "path";
+import getAllFilesRecursively from "./utils/files";
+// Remark packages
+// Rehype packages
+
+const root = process.cwd();
+const contentDir = "content";
+const componentsDir = "components";
+
+// type is a subfolder in content, like 'blogs'
+export function getFiles(type) {
+    const prefixPaths = path.join(root, contentDir, type);
+    const files = getAllFilesRecursively(prefixPaths);
+    // Only want to return blog/path and ignore root, replace is needed to work on Windows
+    return files.map((file) => file.slice(prefixPaths.length + 1).replace(/\\/g, '/'));
+}
+
+export function formatSlug(slug) {
+    return slug.replace(/\.(mdx|md)/, '');
+}
+
+// type is a subfolder in contentDir, like 'blogs'
+export async function getFileBySlug(type, slug) {
+    const mdxPath = path.join(root, contentDir, type, `${slug}.mdx`);
+    const mdPath = path.join(root, contentDir, type, `${slug}.md`);
+    const source = fs.existsSync(mdxPath)
+        ? fs.readFileSync(mdxPath, 'utf8')
+        : fs.readFileSync(mdPath, 'utf8');
+
+    // https://github.com/kentcdodds/mdx-bundler#nextjs-esbuild-enoent
+    if (process.platform === 'win32') {
+        process.env.ESBUILD_BINARY_PATH = path.join(root, 'node_modules', 'esbuild', 'esbuild.exe');
+    } else {
+        process.env.ESBUILD_BINARY_PATH = path.join(root, 'node_modules', 'esbuild', 'bin', 'esbuild');
+    }
+
+    const { code, frontmatter } = await bundleMDX({
+        source: source,
+        cwd: path.join(root, componentsDir),
+        esbuildOptions: (options) => {
+            options.loader = {
+                ...options.loader,
+                '.js': 'jsx',
+            };
+            return options;
+        },
+    });
+
+    return {
+        code,
+        frontMatter: {
+            slug: slug || null,
+            fileName: fs.existsSync(mdxPath) ? `${slug}.mdx` : `${slug}.md`,
+            ...frontmatter,
+            date: frontmatter.date ? new Date(frontmatter.date).toISOString() : null,
+        }
+    };
+}
+
+// type is a subfolder in content, like 'blogs'
+export async function getAllFilesFrontMatter(type) {
+    const prefixPaths = path.join(root, contentDir, type);
+
+    const files = getAllFilesRecursively(prefixPaths);
+
+    const allFrontMatter = [];
+
+    files.forEach((file) => {
+        // Replace is needed to work on Windows
+        const fileName = file.slice(prefixPaths.length + 1).replace(/\\/g, '/');
+        // Remove Unexpected File
+        if (path.extname(fileName) !== '.md' && path.extname(fileName) !== '.mdx') {
+            return;
+        }
+        const source = fs.readFileSync(file, 'utf8');
+        const { data: frontmatter } = matter(source);
+        if (frontmatter.draft !== true) {
+            allFrontMatter.push({
+                ...frontmatter,
+                slug: formatSlug(fileName),
+                date: frontmatter.date ? new Date(frontmatter.date).toISOString() : null,
+            });
+        }
+    });
+
+    return allFrontMatter.sort((a, b) => dateSortDesc(a.date, b.date));
+}
+```
+
+Now that the messy code is out of the way, let's move on to the fun stuff. Simply create some mdx file inside `content`, e.g. `hello.mdx`:
+
+```
+// content/hello.mdx
+
+# Hello *world*
+```
+
+Then inside `pages/index.js` let's display the mdx content on the homepage (note the `prose` class name comes from `@tailwindcss/typography` and it helps us style the markdown content).
+
+```
+// pages/index.js
+import { useMemo } from "react";
+import { getMDXComponent } from "mdx-bundler/client";
+import { getFileBySlug } from "../lib/mdx";
+
+export async function getStaticProps() {
+    const { code, frontMatter } = await getFileBySlug('', "hello");
+    return { props: { code, frontMatter } };
+}
+
+export default function Home({ code, frontMatter }) {
+    const Content = useMemo(() => getMDXComponent(code), [code]);
+    return (
+        <>
+            <div className="prose mx-auto mt-8">
+                <Content />
+            </div>
+        </>
+    );
+}
+```
+
+If everything works correctly, the homepage should show a white background with something like
+
+# Hello _world_
+
+written on it.
