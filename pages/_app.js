@@ -12,7 +12,6 @@ const components = {
 
 function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
-  const Main = getLayout(<Component {...pageProps} />);
   return (
     <MDXProvider components={components}>
       {getLayout(<Component {...pageProps} />)}

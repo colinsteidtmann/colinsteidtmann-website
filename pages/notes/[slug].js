@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import MdxRenderer from "../../components/MdxRenderer";
 import { getFileBySlug, getFilesByType } from "../../lib/mdx";
 
 export async function getStaticPaths() {
@@ -16,17 +17,15 @@ export async function getStaticPaths() {
     };
 }
 
+const type = "notes";
 export async function getStaticProps({ params }) {
     const slug = params.slug;
-    const { metadata, content } = getFileBySlug("notes", slug, { content: true, metadata: true });
-    console.log(metadata);
-    const module = await import(`../../content/notes/${slug}/index.mdx`);
-    console.log(module.default());
-    return { props: { metadata, content: module.default() } };
+    const { metadata } = getFileBySlug(type, slug);
+    return { props: { metadata } };
 }
 
-export default function SpecificNote({ metadata, content }) {
-    const { title, date, tags, lastmod } = metadata;
+export default function SpecificNote({ metadata }) {
+    const { title, date, tags, lastmod, slug } = metadata;
     return (
         <>
             <h1>Specific Notes</h1>
@@ -34,7 +33,7 @@ export default function SpecificNote({ metadata, content }) {
                 <h1>{title}</h1>
                 <p><time dateTime={date} className="italic">Last updated {lastmod}</time></p>
             </div>
-            {content}
+            <MdxRenderer type={type} slug={slug} />
         </>
     );
 }
