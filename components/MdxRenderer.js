@@ -5,10 +5,10 @@ export default function MdxRenderer({ metadata }) {
     const { type, slug, draft } = metadata;
     useEffect(() => {
         (async () => {
-            const module = await import(`../content/${type}/${slug}/index.mdx`);
-            setMdxModule(module);
+            const mdxModule = await import(`../content/${type}/${slug}/index.mdx`);
+            setMdxModule(mdxModule);
         })();
-    }, []);
+    }, [type, slug]);
     const Content = mdxModule ? mdxModule.default : Fragment;
     if (draft) return <p>🚧 Under Construction</p>;
     return <Content />;

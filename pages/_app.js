@@ -6,7 +6,7 @@ import { MDXProvider } from '@mdx-js/react';
 
 
 const components = {
-  img: props => <Image src={require(`../content/${props.src}`)} />,
+  img: props => <Image src={require(`../content/${props.src}`)} alt={props.alt} />,
   a: props => <Link {...props} />
 };
 
