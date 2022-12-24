@@ -15,8 +15,8 @@ export default function About({ metadata }) {
             <div className="prose mx-auto mt-8">
                 <h1>{title}</h1>
                 <time dateTime={date} className="italic">Last updated {lastmod}</time>
+                <MdxRenderer metadata={metadata} />
             </div>
-            <MdxRenderer type={type} slug={slug} />
         </>
     );
 }

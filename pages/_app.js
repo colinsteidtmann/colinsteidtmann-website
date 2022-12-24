@@ -14,7 +14,10 @@ function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   return (
     <MDXProvider components={components}>
-      {getLayout(<Component {...pageProps} />)}
+      <div className="px-3 sm:px-0">
+        {getLayout(<Component {...pageProps} />)}
+      </div>
+
     </MDXProvider>
   );
 

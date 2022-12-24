@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import MdxRenderer from "../../components/MdxRenderer";
 import { getFileBySlug, getFilesByType } from "../../lib/mdx";
+import Link from "next/link";
 
 export async function getStaticPaths() {
     const notes = getFilesByType("notes");
@@ -28,12 +29,13 @@ export default function SpecificNote({ metadata }) {
     const { title, date, tags, lastmod, slug } = metadata;
     return (
         <>
-            <h1>Specific Notes</h1>
             <div className="prose mx-auto mt-8">
+                <Link href="/notes" className="no-underline">← notes</Link>
                 <h1>{title}</h1>
-                <p><time dateTime={date} className="italic">Last updated {lastmod}</time></p>
+                <p><time dateTime={lastmod} className="italic">Last updated {lastmod}</time></p>
+                <MdxRenderer metadata={metadata} />
             </div>
-            <MdxRenderer type={type} slug={slug} />
+
         </>
     );
 }
