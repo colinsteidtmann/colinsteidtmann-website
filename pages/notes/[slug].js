@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import MdxRenderer from "../../components/MdxRenderer";
-import { getFileBySlug, getFilesByType } from "../../lib/mdx";
+import MdxRenderer from "@/components/MdxRenderer";
+import { getFileBySlug, getFilesByType } from "@/lib/mdx";
 import Link from "next/link";
+import { NoteSEO } from "@/components/SEO";
+import siteMetadata from "@/data/siteMetadata";
 
 export async function getStaticPaths() {
     const notes = getFilesByType("notes");
@@ -29,6 +31,7 @@ export default function SpecificNote({ metadata }) {
     const { title, date, tags, lastmod, slug } = metadata;
     return (
         <>
+            <NoteSEO {...metadata} url={siteMetadata.siteLogo + `notes/${slug}/`} />
             <div className="prose mx-auto mt-8">
                 <Link href="/notes" className="no-underline">← notes</Link>
                 <h1>{title}</h1>
