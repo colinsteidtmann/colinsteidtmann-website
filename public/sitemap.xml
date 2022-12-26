@@ -1,26 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.colinsteidtmann.com/about</loc>
+  </url>
 
-        <?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            
-                        <url>
-                            <loc>https://www.colinsteidtmann.com/about</loc>
-                        </url>
-                    
-                        <url>
-                            <loc>https://www.colinsteidtmann.com/</loc>
-                        </url>
-                    
-                        <url>
-                            <loc>https://www.colinsteidtmann.com/notes/</loc>
-                        </url>
-                    
-                        <url>
-                            <loc>https://www.colinsteidtmann.com/author/about/</loc>
-                        </url>
-                    
-                        <url>
-                            <loc>https://www.colinsteidtmann.com/notes/one-wild-bike-trip/</loc>
-                        </url>
-                    
-        </urlset>
-    
+  <url>
+    <loc>https://www.colinsteidtmann.com/</loc>
+  </url>
+
+  <url>
+    <loc>https://www.colinsteidtmann.com/notes/</loc>
+  </url>
+
+  <url>
+    <loc>https://www.colinsteidtmann.com/author/about/</loc>
+  </url>
+
+  <url>
+    <loc>https://www.colinsteidtmann.com/notes/one-wild-bike-trip/</loc>
+  </url>
+</urlset>
