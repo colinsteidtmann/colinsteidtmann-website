@@ -10,10 +10,10 @@ export async function getStaticProps() {
 }
 
 export default function About({ metadata }) {
-    const { title, date, tags, lastmod } = metadata;
+    const { title, date, tags, lastmod, description } = metadata;
     return (
         <>
-            <PageSEO {...metadata} />
+            <PageSEO title={title} description={description} ogType="profile" />
             <div className="prose mx-auto mt-8">
                 <h1>{title}</h1>
                 <time dateTime={date} className="italic">Last updated {lastmod}</time>

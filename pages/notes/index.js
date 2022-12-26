@@ -10,7 +10,11 @@ export async function getStaticProps() {
 export default function Notes({ notes }) {
     return (
         <>
-            <PageSEO title={"Notes - Colin Steidtmann"} description={"Notes I take as I learn/do different things. "} />
+            <PageSEO
+                title="Notes - Colin Steidtmann"
+                description="Notes I take as I learn/do different things."
+                ogType="website"
+            />
             <div className="prose mx-auto">
                 <h1>All Notes</h1>
                 <p>Notes mainly to remind my future self how to do something or what I was doing over the years.</p>

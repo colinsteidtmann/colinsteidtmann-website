@@ -6,7 +6,7 @@ export default function Home() {
   let pages = [{ title: "about", url: "/about", id: 0 }, { title: "notes", url: "/notes", id: 1 }];
   return (
     <>
-      <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
+      <PageSEO title={siteMetadata.title} description={siteMetadata.description} ogType="website" />
       <div className="grid h-screen place-items-center">
         <div className="prose font-mono text-center">
           <h1 className="text-2xl tracking-[0.1em]">

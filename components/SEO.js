@@ -1,8 +1,11 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import siteMetadata from "@/data/siteMetadata";
-
+// og prefixes - see https://ogp.me/
+// twitter prefixes - see https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/markup
+// @ prefixes and JSON - see https://schema.org/ & https://search.google.com/test/rich-results 
 const CommonSEO = ({ title, description, ogType, canonicalUrl }) => {
+    // ogType options: article, website, profile
     const router = useRouter();
     const ogImageUrl = siteMetadata.siteUrl + siteMetadata.socialBanner;
     return (
@@ -29,34 +32,17 @@ const CommonSEO = ({ title, description, ogType, canonicalUrl }) => {
     );
 };
 
-export const PageSEO = ({ title, description, canonicalUrl }) => {
+/**
+ * @param ogType article, website, profile
+ */
+export const PageSEO = ({ title, description, ogType, canonicalUrl }) => {
     return (
         <CommonSEO
             title={title}
             description={description}
+            ogType={ogType}
             canonicalUrl={canonicalUrl}
         />
-    );
-};
-
-export const TagSEO = ({ title, description }) => {
-    const router = useRouter();
-    return (
-        <>
-            <CommonSEO
-                title={title}
-                description={description}
-                ogType="website"
-            />
-            <Head>
-                <link
-                    rel="alternate"
-                    type="application/rss+xml"
-                    title={`${description} - RSS feed`}
-                    href={`${siteMetadata.siteUrl}${router.asPath}/feed.xml`}
-                />
-            </Head>
-        </>
     );
 };
 
@@ -66,39 +52,46 @@ export const NoteSEO = ({
     date,
     lastmod,
     url,
+    keywords,
     canonicalUrl,
 }) => {
     const publishedAt = new Date(date).toISOString();
     const modifiedAt = new Date(lastmod || date).toISOString();
+    // see https://schema.org/Article
     const structuredData = {
         "@context": "https://schema.org",
         "@type": "Article",
-        mainEntityOfPage: {
+        "author": siteMetadata.author,
+        "name": title,
+        "headline": title,
+        "description": description,
+        "datePublished": publishedAt,
+        "dateModified": modifiedAt,
+        "dateCreated": publishedAt,
+        "keywords": keywords,
+        "author": [
+            {
+                "@type": "Person",
+                "name": siteMetadata.author,
+                "url": "https://www.colinsteidtmann.com/about"
+            }
+        ],
+        "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": url,
         },
-        headline: title,
-        datePublished: publishedAt,
-        dateModified: modifiedAt,
-        author: {
-            "@type": "Person",
-            name: siteMetadata.author
-        },
-        publisher: {
+        "publisher": {
             "@type": "Organization",
-            name: siteMetadata.author,
-            logo: {
+            "name": siteMetadata.author,
+            "logo": {
                 "@type": "ImageObject",
-                url: `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`,
+                "url": `${siteMetadata.siteUrl}${siteMetadata.siteLogo}`,
             },
         },
-        description: description,
     };
-
-
     return (
         <>
-            <CommonSEO
+            <PageSEO
                 title={title}
                 description={description}
                 ogType="article"

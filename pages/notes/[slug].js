@@ -7,7 +7,6 @@ import siteMetadata from "@/data/siteMetadata";
 
 export async function getStaticPaths() {
     const notes = getFilesByType("notes");
-
     return {
         paths: notes.map((note) => {
             return {
@@ -28,10 +27,17 @@ export async function getStaticProps({ params }) {
 }
 
 export default function SpecificNote({ metadata }) {
-    const { title, date, tags, lastmod, slug } = metadata;
+    const { title, date, tags, lastmod, slug, description, keywords } = metadata;
     return (
         <>
-            <NoteSEO {...metadata} url={siteMetadata.siteLogo + `notes/${slug}/`} />
+            <NoteSEO
+                title={title}
+                description={description}
+                date={date}
+                lastmod={lastmod}
+                keywords={keywords}
+                url={`${siteMetadata.siteUrl}/notes/${slug}/`}
+            />
             <div className="prose mx-auto mt-8">
                 <Link href="/notes" className="no-underline">← notes</Link>
                 <h1>{title}</h1>
