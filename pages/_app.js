@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import Layout from '@/components/Layout';
+import { Analytics } from '@vercel/analytics/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { MDXProvider } from '@mdx-js/react';
@@ -21,6 +22,7 @@ function MyApp({ Component, pageProps }) {
       <MDXProvider components={components}>
         {getLayout(<Component {...pageProps} />)}
       </MDXProvider>
+      <Analytics />
     </>
   );
 
