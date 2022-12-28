@@ -1,15 +1,19 @@
-import '@/styles/globals.css';
-import Layout from '@/components/Layout';
-import { Analytics } from '@vercel/analytics/react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { MDXProvider } from '@mdx-js/react';
-import Head from 'next/head';
-
+import "@/styles/globals.css";
+import Layout from "@/components/Layout";
+import { Analytics } from "@vercel/analytics/react";
+import Link from "next/link";
+import Image from "next/image";
+import { MDXProvider } from "@mdx-js/react";
+import Head from "next/head";
 
 const components = {
-  img: props => <Image src={require(`../content/${props.src}`)} alt={props.alt} />,
-  a: props => <Link {...props} />
+  img: (props) => (
+    <Image
+      src={require(`../content/${props.src}`)}
+      alt={props.alt}
+    />
+  ),
+  a: (props) => <Link {...props} />,
 };
 
 function MyApp({ Component, pageProps }) {
@@ -17,7 +21,10 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <meta content="width=device-width, initial-scale=1" name="viewport" />
+        <meta
+          content="width=device-width, initial-scale=1"
+          name="viewport"
+        />
       </Head>
       <MDXProvider components={components}>
         {getLayout(<Component {...pageProps} />)}
@@ -25,7 +32,6 @@ function MyApp({ Component, pageProps }) {
       <Analytics />
     </>
   );
-
 }
 
 export default MyApp;

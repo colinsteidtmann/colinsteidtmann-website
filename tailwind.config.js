@@ -1,14 +1,12 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
-const colors = require('tailwindcss/colors');
+const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    './content/**/*.mdx',
+    "./content/**/*.mdx",
   ],
-  plugins: [
-    require('@tailwindcss/typography'),
-  ],
+  plugins: [require("@tailwindcss/typography")],
 };
