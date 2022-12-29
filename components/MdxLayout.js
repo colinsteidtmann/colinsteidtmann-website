@@ -17,7 +17,7 @@ export default function MdxLayout({ children, lastmod }) {
     };
   });
   return (
-    <>
+    <div className="px-4 sm:px-0">
       <nav className="py-3">
         <ul className="flex flex-row items-center gap-x-2 max-w-prose mx-auto">
           <li>
@@ -37,7 +37,7 @@ export default function MdxLayout({ children, lastmod }) {
           })}
         </ul>
       </nav>
-      <div className="bg-[#fdfdfd] min-h-screen">
+      <div className="bg-[#fdfdfd] min-h-screen -mx-4 sm:mx-0 px-4 sm:px-0">
         <div className="prose mx-auto">
           <p className="pt-4">
             <time dateTime={lastmod}>Last updated {lastmod}</time>
@@ -45,6 +45,6 @@ export default function MdxLayout({ children, lastmod }) {
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }
