@@ -1,16 +1,17 @@
 import MdxRenderer from "@/components/MdxRenderer";
-import { getFileBySlug, getFilesByType } from "@/lib/mdx";
+import { getFileBySlug, getSlugs } from "@/lib/mdx";
 import { NoteSEO } from "@/components/SEO";
 import siteMetadata from "@/data/siteMetadata";
 import MdxLayout from "@/components/MdxLayout";
+import { formatDate } from "@/lib/utils";
 
 export async function getStaticPaths() {
-  const notes = getFilesByType("notes");
+  const slugs = getSlugs();
   return {
-    paths: notes.map((note) => {
+    paths: slugs.map((slug) => {
       return {
         params: {
-          slug: note.metadata.slug,
+          slug: slug,
         },
       };
     }),
@@ -18,10 +19,9 @@ export async function getStaticPaths() {
   };
 }
 
-const type = "notes";
 export async function getStaticProps({ params }) {
   const slug = params.slug;
-  const { metadata } = getFileBySlug(type, slug);
+  const { metadata } = getFileBySlug(slug);
   return { props: { metadata } };
 }
 
@@ -37,12 +37,10 @@ export default function SpecificNote({ metadata }) {
         keywords={keywords}
         url={`${siteMetadata.siteUrl}/notes/${slug}/`}
       />
-      <MdxLayout lastmod={lastmod}>
+      <MdxLayout lastmod={formatDate(lastmod)}>
         <h1>{title}</h1>
         <MdxRenderer metadata={metadata} />
       </MdxLayout>
-
-
     </>
   );
 }

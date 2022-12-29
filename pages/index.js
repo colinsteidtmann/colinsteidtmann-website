@@ -22,21 +22,14 @@ export default function Home() {
               {pages.map((page) => {
                 return (
                   <li key={page.id}>
-                    <Link
-                      href={page.url}
-
-                    >
-                      {page.title}
-                    </Link>
+                    <Link href={page.url}>{page.title}</Link>
                   </li>
                 );
               })}
             </ul>
           </nav>
         </div>
-
       </div>
-
     </>
   );
 }

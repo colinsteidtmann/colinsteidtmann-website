@@ -1,15 +1,15 @@
 import Link from "next/link";
-import { getFilesByType } from "@/lib/mdx";
+import { getAllFiles } from "@/lib/mdx";
 import { PageSEO } from "@/components/SEO";
 import MdxLayout from "@/components/MdxLayout";
+import { formatDate } from "@/lib/utils";
 
 export async function getStaticProps() {
-  const notes = getFilesByType("notes");
+  const notes = getAllFiles();
   return { props: { notes } };
 }
 
 export default function Notes({ notes }) {
-  console.log(notes);
   return (
     <>
       <PageSEO
@@ -17,12 +17,7 @@ export default function Notes({ notes }) {
         description="Notes I take as I learn/do different things."
         ogType="website"
       />
-      <MdxLayout lastmod={notes[0]?.metadata.lastmod}>
-        <div className="flex flex-row items-center gap-x-2 -mt-5">
-          <p>Category:</p>
-          <Link href="/notes/author">Author</Link>
-        </div>
-
+      <MdxLayout lastmod={formatDate(notes[0]?.metadata.lastmod)}>
         <h1>Notes</h1>
         <p>
           Notes mainly to remind my future self how to do something or what I
@@ -33,11 +28,8 @@ export default function Notes({ notes }) {
             const { title, date, slug } = n.metadata;
             return (
               <li key={slug}>
-                <Link
-                  href={`/notes/${slug}`}
-                >
-                  {title}{" "}
-                  <time dateTime={date}>({date})</time>
+                <Link href={`/notes/${slug}`}>
+                  {title} <time dateTime={date}>({formatDate(date)})</time>
                 </Link>
               </li>
             );
