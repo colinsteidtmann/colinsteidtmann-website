@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import Layout from "@/components/Layout";
 import { Analytics } from "@vercel/analytics/react";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,7 +16,6 @@ const components = {
 };
 
 function MyApp({ Component, pageProps }) {
-  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
   return (
     <>
       <Head>
@@ -27,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         />
       </Head>
       <MDXProvider components={components}>
-        {getLayout(<Component {...pageProps} />)}
+        <Component {...pageProps} />
       </MDXProvider>
       <Analytics />
     </>

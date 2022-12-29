@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getFilesByType } from "@/lib/mdx";
 import { PageSEO } from "@/components/SEO";
+import MdxLayout from "@/components/MdxLayout";
 
 export async function getStaticProps() {
   const notes = getFilesByType("notes");
@@ -8,6 +9,7 @@ export async function getStaticProps() {
 }
 
 export default function Notes({ notes }) {
+  console.log(notes);
   return (
     <>
       <PageSEO
@@ -15,8 +17,13 @@ export default function Notes({ notes }) {
         description="Notes I take as I learn/do different things."
         ogType="website"
       />
-      <div className="prose mx-auto">
-        <h1>All Notes</h1>
+      <MdxLayout lastmod={notes[0]?.metadata.lastmod}>
+        <div className="flex flex-row items-center gap-x-2 -mt-5">
+          <p>Category:</p>
+          <Link href="/notes/author">Author</Link>
+        </div>
+
+        <h1>Notes</h1>
         <p>
           Notes mainly to remind my future self how to do something or what I
           was doing over the years.
@@ -28,23 +35,15 @@ export default function Notes({ notes }) {
               <li key={slug}>
                 <Link
                   href={`/notes/${slug}`}
-                  className="no-underline"
                 >
-                  <p>
-                    {title}{" "}
-                    <time
-                      className="text-slate-600 text-sm"
-                      dateTime={date}
-                    >
-                      ({date})
-                    </time>
-                  </p>
+                  {title}{" "}
+                  <time dateTime={date}>({date})</time>
                 </Link>
               </li>
             );
           })}
         </ul>
-      </div>
+      </MdxLayout>
     </>
   );
 }

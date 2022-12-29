@@ -2,7 +2,7 @@ import MdxRenderer from "@/components/MdxRenderer";
 import { getFileBySlug, getFilesByType } from "@/lib/mdx";
 import { NoteSEO } from "@/components/SEO";
 import siteMetadata from "@/data/siteMetadata";
-import { useRouter } from "next/router";
+import MdxLayout from "@/components/MdxLayout";
 
 export async function getStaticPaths() {
   const notes = getFilesByType("notes");
@@ -37,19 +37,12 @@ export default function SpecificNote({ metadata }) {
         keywords={keywords}
         url={`${siteMetadata.siteUrl}/notes/${slug}/`}
       />
-
-      <div className="prose mx-auto mt-8 max-w-3xl">
+      <MdxLayout lastmod={lastmod}>
         <h1>{title}</h1>
-        <p>
-          <time
-            dateTime={lastmod}
-            className="italic"
-          >
-            Last updated {lastmod}
-          </time>
-        </p>
         <MdxRenderer metadata={metadata} />
-      </div>
+      </MdxLayout>
+
+
     </>
   );
 }

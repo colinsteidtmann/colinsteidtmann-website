@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   let pages = [
-    { title: "about", url: "/about", id: 0 },
+    { title: "about", url: "/notes/about", id: 0 },
     { title: "notes", url: "/notes", id: 1 },
   ];
   return (
@@ -14,24 +14,29 @@ export default function Home() {
         description={siteMetadata.description}
         ogType="website"
       />
-      <div className="grid h-screen place-items-center">
-        <div className="prose font-mono text-center">
-          <h1 className="text-2xl tracking-[0.1em]">colin steidtmann</h1>
-          <div className="flex flex-col mt-5">
-            {pages.map((page) => {
-              return (
-                <Link
-                  className="text-lg no-underline"
-                  href={page.url}
-                  key={page.id}
-                >
-                  {page.title}
-                </Link>
-              );
-            })}
-          </div>
+      <div className="grid h-screen place-items-center text-center prose mx-auto">
+        <div>
+          <h1 className="mb-5">colin steidtmann</h1>
+          <nav className="not-prose text-xl">
+            <ul className="flex flex-col">
+              {pages.map((page) => {
+                return (
+                  <li key={page.id}>
+                    <Link
+                      href={page.url}
+
+                    >
+                      {page.title}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
+
       </div>
+
     </>
   );
 }

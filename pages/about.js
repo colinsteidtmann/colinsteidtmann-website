@@ -1,3 +1,4 @@
+import MdxLayout from "@/components/MdxLayout";
 import MdxRenderer from "@/components/MdxRenderer";
 import { PageSEO } from "@/components/SEO";
 import { getFileBySlug } from "@/lib/mdx";
@@ -18,16 +19,17 @@ export default function About({ metadata }) {
         description={description}
         ogType="profile"
       />
-      <div className="prose mx-auto mt-8">
+      <MdxLayout>
         <h1>{title}</h1>
         <time
           dateTime={date}
-          className="italic"
         >
           Last updated {lastmod}
         </time>
         <MdxRenderer metadata={metadata} />
-      </div>
+      </MdxLayout>
+
+
     </>
   );
 }
