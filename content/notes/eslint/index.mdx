@@ -1,0 +1,85 @@
+# ESLint Reference Sheet
+
+ESLint is a JavaScript package that you can add to your project. It lets you set up rules to self-enforce quality and consistent code.
+
+## Quick Start
+
+Install with setup help
+
+```js
+npm init @eslint/config
+```
+
+Clean install
+
+```js
+yarn add --dev eslint
+```
+
+### Configuring ESLint
+
+ESLint's config file is `.eslintrc.js`. Let's assume it's blank:
+
+```js
+module.exports = {};
+```
+
+#### Rules
+
+ESLint comes with a bunch of [rules](https://eslint.org/docs/latest/rules/) that you can manually turn on.
+
+```js
+module.exports = {
+  rules: {
+    eqeqeq: "error",
+    quotes: ["warn", "double"],
+    semi: "2",
+  },
+};
+```
+
+`"eqeqeq"` is the rule name, found on ESLint's docs or from a plugin. After that is either the rule severity (e.g. `"error"`) or a list that has the severity followed by custom options which can be a string, object, etc, `["warn", "double"]`, it depends on the specific rule so check it's documentation. BTW, you can declare the severity with words or numbers: ` "0" = "off", "1" = "warn", "2" = "error"`.
+
+#### Plugins
+
+ESLint lets you define your own rules, or import someone else's rules that they created and published as an NPM package, eg. `eslint-plugin-react` which has linting rules for React and JSX. Or, `eslint-plugin-react-hooks` which has linting rules for React Hooks.
+
+```js
+yarn add --dev eslint-plugin-react
+```
+
+```js
+module.exports = {
+	"plugins" ["react"],
+	"rules" {
+		"react/jsx-uses-vars": "error",
+	}
+}
+```
+
+Note, plugins require you to add the rules manually, if you don't want to do this then you should extend their config file.
+
+#### Sharable Config Files
+
+Manually adding rules and importing plugins gets tedious. Skip the work by extending someone else's config file that already has plugins and rules declared. Eg. `eslint:recommended` which comes with the `eslint` package or ones you've installed like `eslint-config-airbnb`. Extending a config file also imports their plugins. Below, we extend the airbnb config file which includes the react and react-hook plugins so we don't need to manually install them anymore!
+
+```js
+module.exports = {
+	"extends": [
+		"eslint:recommended",
+		"airbnb",
+		"airbnb/hooks"
+	],
+	(...)
+}
+```
+
+Instead of downloading a separate `eslint-config-{pkgName}`, some plugins also come with a config file that you can use. Eg. `eslint-plugin-react`. Using it is as simple as:
+
+```js
+module.exports = {
+  extends: ["plugin:react/recommended"],
+};
+```
+
+The `plugin:` syntax tells eslint to look for the shared config file in the `eslint-plugin-react` package that we've installed. We don't need to declare `plugins: ["react"]` because the shared config file already does that!
