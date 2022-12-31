@@ -1,34 +1,45 @@
-# ESLint Reference Sheet
+---
+title: My Personal ESLint Reference Sheet
+description: My notes on ESLint and a quick reference sheet.
+date: 12/30/2022
+tags: []
+lastmod: 12/30/2022
+---
 
-ESLint is a JavaScript package that you can add to your project. It lets you set up rules to self-enforce quality and consistent code.
+ESLint is a JavaScript package that you can add to your project. It lets you set up rules to self-enforce high quality and consistent code.
 
-## Quick Start
+_It won't do anything unless you extend some else's config file or explicitly turn on rules in your config file._
 
-Install with setup help
+## Quick Start and basic knowledge needed
 
-```js
+Install with ESLint's setup help
+
+```javascript
 npm init @eslint/config
 ```
 
-Clean install
+OR clean install
 
-```js
+```javascript
 yarn add --dev eslint
 ```
 
-### Configuring ESLint
+Run it with the ESLint CLI:
+`npx eslint [options] file.js [file.js] [dir]` OR create a script in your `package.json` file ([CLI source](https://eslint.org/docs/latest/user-guide/command-line-interface)).
 
-ESLint's config file is `.eslintrc.js`. Let's assume it's blank:
+### Configuring ESLint ([source](https://eslint.org/docs/latest/user-guide/configuring/))
 
-```js
+ESLint's config file is `.eslintrc.js`. Assume it's blank:
+
+```javascript
 module.exports = {};
 ```
 
-#### Rules
+#### Rules ([source](https://eslint.org/docs/latest/user-guide/configuring/rules))
 
 ESLint comes with a bunch of [rules](https://eslint.org/docs/latest/rules/) that you can manually turn on.
 
-```js
+```javascript
 module.exports = {
   rules: {
     eqeqeq: "error",
@@ -38,17 +49,40 @@ module.exports = {
 };
 ```
 
-`"eqeqeq"` is the rule name, found on ESLint's docs or from a plugin. After that is either the rule severity (e.g. `"error"`) or a list that has the severity followed by custom options which can be a string, object, etc, `["warn", "double"]`, it depends on the specific rule so check it's documentation. BTW, you can declare the severity with words or numbers: ` "0" = "off", "1" = "warn", "2" = "error"`.
+`"eqeqeq"` is the rule name, found on ESLint's docs or from a plugin's ruleset. After that is either the rule severity (`"error"`) or a list that has the severity followed by options you can set formatted as string/object/... it depends on the specific rule (`["warn", "double"]`). You can declare the severity with words or numbers: ` "0" = "off", "1" = "warn", "2" = "error"`.
 
-#### Plugins
+You can also use specific rules in certain files with comments
 
-ESLint lets you define your own rules, or import someone else's rules that they created and published as an NPM package, eg. `eslint-plugin-react` which has linting rules for React and JSX. Or, `eslint-plugin-react-hooks` which has linting rules for React Hooks.
+```javascript
+/* eslint eqeqeq: "off", curly: "error" */
+```
 
-```js
+Again, you see the format - _rule name_ : _rule value_
+
+Or you can enable/disable rules in certain files
+
+```javascript
+/* eslint-disable no-console -- For entire file*/
+console.log("won't show");
+
+alert("foo"); // eslint-disable-line no-alert -- Specific rule, this line only
+
+// eslint-enable-next-line -- All rules, next line only
+console.log("hey");
+
+/* eslint-disable-next-line no-alert */
+alert("foo");
+```
+
+#### Plugins ([source](https://eslint.org/docs/latest/user-guide/configuring/plugins))
+
+ESLint lets you define your own rules, or import someone else's rules that they created and published as an NPM package, eg. [`eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react) which has linting rules for React and JSX. Or, [`eslint-plugin-react-hooks`](https://www.npmjs.com/package/eslint-plugin-react-hooks) which has linting rules for React Hooks.
+
+```javascript
 yarn add --dev eslint-plugin-react
 ```
 
-```js
+```javascript
 module.exports = {
 	"plugins" ["react"],
 	"rules" {
@@ -59,11 +93,11 @@ module.exports = {
 
 Note, plugins require you to add the rules manually, if you don't want to do this then you should extend their config file.
 
-#### Sharable Config Files
+#### Sharable Config Files ([source](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#extending-configuration-files))
 
-Manually adding rules and importing plugins gets tedious. Skip the work by extending someone else's config file that already has plugins and rules declared. Eg. `eslint:recommended` which comes with the `eslint` package or ones you've installed like `eslint-config-airbnb`. Extending a config file also imports their plugins. Below, we extend the airbnb config file which includes the react and react-hook plugins so we don't need to manually install them anymore!
+Manually adding rules and importing plugins gets tedious. Skip the work by extending someone else's config file which already include plugins and rules declared. Eg. [`eslint:recommended`](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#using-eslintrecommended) which comes with the `eslint` package or ones you've installed like [`eslint-config-airbnb`](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb). Extending a config file also imports their plugins. Below, we extend the Airbnb config file which includes the react and react-hook plugins so we don't need to manually install or declare them anymore, aka we can ~~`"plugins": ["react"]`~~!
 
-```js
+```javascript
 module.exports = {
 	"extends": [
 		"eslint:recommended",
@@ -74,12 +108,118 @@ module.exports = {
 }
 ```
 
-Instead of downloading a separate `eslint-config-{pkgName}`, some plugins also come with a config file that you can use. Eg. `eslint-plugin-react`. Using it is as simple as:
+Instead of downloading a separate config file, `eslint-config-{pkgName}`, some plugins also come with a config file that you can use. Eg. [`eslint-plugin-react`](https://github.com/jsx-eslint/eslint-plugin-react). Using it is as simple as:
 
-```js
+```javascript
 module.exports = {
   extends: ["plugin:react/recommended"],
 };
 ```
 
-The `plugin:` syntax tells eslint to look for the shared config file in the `eslint-plugin-react` package that we've installed. We don't need to declare `plugins: ["react"]` because the shared config file already does that!
+The `plugin:` syntax tells ESLint to look for the shared config file in the `eslint-plugin-react` package that we've installed.
+
+## Advanced
+
+These are sometimes not needed if you're extending from a config like [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next). Still helpful knowledge to have.
+
+### Environments ([source](https://eslint.org/docs/latest/user-guide/configuring/language-options#specifying-environments))
+
+Tell ESLint what environment your code runs in so that it knows the predefined global variables (e.g. the `"browser"` environment comes with vars like `window`).
+
+```javascript
+module.exports = {
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6":true
+    }
+    (...)
+}
+```
+
+### Parser Options
+
+Tell ESLint what syntax you're using. ES3-ES5 is ESLint's default but ES6/ES2015 and beyond is modern day JavaScript. Specifying `module` is important if you use `import`/`export` and `jsx` is important if you're using React.
+
+```javascript
+module.exports = {
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    }
+    (...)
+}
+```
+
+### Custom rules
+
+It's gets fairly involved, here's [a good article](https://stevenpetryk.com/blog/custom-eslint-rules/) on it.
+
+## My personal setup for a NextJS Website
+
+### Config files I extend:
+
+- [eslint:recommended](https://eslint.org/docs/latest/rules/)
+- [eslint-config-next](https://github.com/vercel/next.js/tree/canary/packages/eslint-config-next) which includes in it:
+  - Extends [`plugin:react/recommended`](https://github.com/jsx-eslint/eslint-plugin-react)
+  - Extends [`plugin:react-hooks/recommended`](https://github.com/facebook/react/tree/main/packages/eslint-plugin-react-hooks)
+  - Extends [`plugin:@next/next/recommended`](https://github.com/vercel/next.js/tree/canary/packages/eslint-plugin-next)
+- [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) OR [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier#recommended-configuration)
+  - Add this last so that prettier can override other configs.
+  - Run the prettier script (`prettier --write`) _before_ the ESLint script (`eslint --fix`) or else you'll get issues when the prettier format conflicts with your ESLint rules.
+    - A package called [prettier-eslint](https://github.com/prettier/prettier-eslint) will do these this for you (running Prettier then ESLint) but it's easy enough to do it yourself.
+
+#### .eslintrc.json
+
+```json
+// .eslintrc.json
+{
+  "extends": [
+    "eslint:recommended",
+    "next",
+    "next/core-web-vitals"
+    "plugin:prettier/recommended",
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/no-unescaped-entities": "off",
+    "no-var": "error", // use let or const instead
+    "require-await": "warn", // Disallow async functions which have no await expression
+    "semi-style": ["warn", "last"], // semicolons must be at the end
+    "semi": ["warn", "always"], // must use semi colons
+    "quotes": [
+      "warn",
+      "double",
+      { "allowTemplateLiterals": true, "avoidEscape": true }
+    ], // must use double quotes
+    "no-unused-vars": "warn" // don't have unused variables
+  }
+}
+```
+
+#### package.json
+
+```json
+//package.json
+{
+  "scripts": {
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "prettier-check": "prettier --check .",
+    "prettier-write": "prettier --write .",
+    "clean": "prettier --write . && eslint . --fix"
+  },
+  "devDependencies": {
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "2.8.1"
+  }
+}
+```
