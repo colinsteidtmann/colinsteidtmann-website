@@ -1,0 +1,247 @@
+---
+title: Prettier Reference Sheet
+
+description: My notes on prettier and a quick reference sheet.
+
+date: 12/31/2022
+
+tags: []
+
+lastmod: 12/31/2022
+---
+
+Prettier is an _opinionated_ code formatter so it comes with its own belief on how code should be formatted and doesn't overwhelm you with ways to change it.
+
+Prettier vs ESLint?
+
+- Prettier formats your code (makes it look pretty).
+
+- ESLint lints your code (finds errors such as broken HTML links).
+
+## Install ([source](https://prettier.io/docs/en/install.html))
+
+You can install and configure Prettier as an extension in your code editor, like the VS Code [prettier extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode).
+
+OR you can install it as an npm package in your project which overrides your extension's setup and ensure your entire team formats code the same.
+
+```bash
+
+yarn add --dev --exact prettier
+
+```
+
+Prettier recommends using `--exact` so that your package version doesn't change as they release new updates.
+
+## Configuring/customizing
+
+Prettier comes with [good principles](https://prettier.io/docs/en/rationale.html) on how code should be formatted, but you may want to customize it a bit inside [`.prettierrc.json`](https://prettier.io/docs/en/configuration.html).
+
+(_btw, 'rc' stands for "run commands" and the rc suffix is commonly used for any file that contains startup information for a program._)
+
+Here's a bunch of prettier [defaults](https://prettier.io/docs/en/options.html):
+
+```json
+{
+  "printWidth": 80, // 80 characters per line before they're wrapped
+
+  "tabWidth": 2, // 2 spaces / indentation level
+
+  "useTabs": false, // indents lines with spaces, not tabs
+
+  "semi": true, // puts semicolons at the end of lines
+
+  "singleQuote": false, // uses double quotes, not single quotes
+
+  "trailingComma": "es5", // allows trailing commas in objects if valid by es5 standard
+
+  "bracketSpacing": true, // turns {foo:100} into this { foo:100 }
+
+  "bracketSameLine": false, // put the closing '>' for multiline HTML/React elements on a new line.
+
+  "arrowParens": "always", // turns x => x into (x) => x
+
+  "parser": "", // none, prettier automatically infers the language via it's file extension
+
+  "proseWrap": "preserve", // won't wrap lines in markdown files
+
+  "endOfLine": "lf", // prettier uses \n, not Window's \r\n for line endings
+
+  "embeddedLanguageFormatting": "auto", // prettier tries to format code in markdown files
+
+  "singleAttributePerLine": false // prettier won't change <p prop="" class=""> into a multiline HTML element
+}
+```
+
+## Ignoring specific code
+
+### Ignore with a [`.prettierignore` file](https://prettier.io/docs/en/ignore.html)
+
+Create an ignore file (tells prettier which files/folders not to format) `.prettierignore`
+
+```ignore
+
+# Prettier ignores these by default
+
+**/.git
+
+**/.svn
+
+**/.hg
+
+**/node_modules
+
+**/.git
+
+**/.svn
+
+**/.hg
+
+```
+
+### Ignoring within a file
+
+Or ignore specific parts of files with comments
+
+```javascript
+
+// prettier-ignore
+
+const  uglyMatrix = [[1,2,3],[4,5,6],[7,8,9],...,[1000,1001,1002]]
+
+
+
+// prettier-ignore-start
+
+const  uglyQuotes = 'word';
+
+// prettier-ignore-end
+
+```
+
+## Using Prettier
+
+### Using from the [CLI](https://prettier.io/docs/en/cli.html)
+
+Check formatting on files:
+
+```bash
+
+npx prettier . --check
+
+```
+
+Actually format your files:
+
+```bash
+
+npx prettier . --write
+
+```
+
+(_Btw, `npx` lets you use locally installed packages in your CLI. If you don't have Prettier installed then it will temporally install it, but it's bad to use Prettier this way because then your code would be formatted differently for every new Prettier release._)
+
+### Using from a script in `package.json`
+
+You can create a script in `package.json`
+
+```json
+{
+  "scripts": {
+    "prettier-check": "prettier --check .",
+
+    "prettier-write": "prettier --write ."
+  }
+}
+```
+
+### Using from the [API](https://prettier.io/docs/en/api.html) during runtime
+
+You can format files/strings that contain code on the fly while your code is running. This is useful for things like generating sitemaps programmatically where `sitemap.xml` files must be formatted correctly.
+
+Here's how to format strings of code: `prettier.format(source, options)`
+
+It's important to set options with the correct [parser](https://prettier.io/docs/en/options.html#parser) specific to the language that the code/source is in, and any custom style options you want which will override the prettier defaults.
+
+```javascript
+const prettier = require("prettier");
+
+prettier.format("foo ( );", { semi: false, parser: "babel" }); // -> "foo()"
+```
+
+If you want to format a file (not string), it's easier because Prettier can figure out the correct parser to use from the file extension.
+
+```javascript
+const prettier = require("prettier");
+
+const text = fs.readFileSync(filePath, "utf8");
+
+prettier.resolveConfig(filePath).then((options) => {
+  const formatted = prettier.format(text, options);
+});
+```
+
+## Integrating with ESLint
+
+ESLint can format code too. This may conflict with how Prettier formats your code. Best advice is to extend your config file with the [`eslint-config-prettier`](https://github.com/prettier/eslint-config-prettier) package and follow the instructions on how to set it up:
+
+```json
+{
+  "extends": [
+    "eslint:recommended",
+
+    "someOtherPackages",
+
+    "prettier" // it's important to add this last
+  ]
+}
+```
+
+Then make sure to **run prettier before ESLint**.
+
+## My personal setup
+
+I like Prettier just how it ships so my setup isn't much.
+
+1. Install [prettier](https://github.com/prettier/prettier):
+
+```bash
+
+yarn add --dev --exact prettier
+
+```
+
+3. Install [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier#recommended-configuration) and integrate with ESLint
+
+```bash
+
+yarn add --dev eslint-plugin-prettier
+
+```
+
+```json
+// .eslintrc.json
+
+{
+  "extends": ["other packages", "plugin:prettier/recommended"]
+}
+```
+
+4. I create scripts to run them inside my `package.json` file
+
+```json
+{
+  "scripts": {
+    "prettier-write": "prettier --write .",
+
+    "prettier-check": "prettier --check .",
+
+    "lint-check": "eslint .",
+
+    "lint-fix": "eslint . --fix",
+
+    "clean": "prettier --write . && eslint . --fix"
+  }
+}
+```
+
+5. I create config and ignore files that simply contain the defaults so that I can easily check what those look like and modify them later if necessary.

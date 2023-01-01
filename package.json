@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "sitemap": "node scripts/generate-sitemap.js",
-    "prettier": "prettier --write .",
+    "prettier-write": "prettier --write .",
     "prettier-check": "prettier --check .",
     "clean": "prettier --write . && eslint . --fix"
   },
