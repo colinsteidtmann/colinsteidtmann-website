@@ -1,26 +1,4 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:prettier/recommended",
-    "next",
-    "next/core-web-vitals"
-  ],
-  "rules": {
-    "prettier/prettier": "error",
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off",
-    "react/no-unescaped-entities": "off",
-    "no-var": "error", // use let or const instead
-    "require-await": "warn", // Disallow async functions which have no await expression
-    "semi-style": ["warn", "last"], // semicolons must be at the end
-    "semi": ["warn", "always"], // must use semi colons
-    "quotes": [
-      "warn",
-      "double",
-      { "allowTemplateLiterals": true, "avoidEscape": true }
-    ], // must use double quotes
-    "no-unused-vars": "warn"
-  }
+  "extends": ["eslint:recommended", "next/core-web-vitals", "prettier"],
+  "rules": {}
 }
-
-// 0 = off, 1 = warn, 2 = error
