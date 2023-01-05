@@ -6,17 +6,18 @@ export default function AllPosts() {
     <>
       {links.map((day) => {
         return (
-          <Link
-            key={day[0]}
-            href={day[1]}
-            className="cursor-pointer"
-          >
+          <div key={day[0]}>
             <h3>{`Day ${day[0]}`}</h3>
-            <FacebookPost
+            <Link
               href={day[1]}
-              height={day[2]}
-            />
-          </Link>
+              className="cursor-pointer"
+            >
+              <FacebookPost
+                href={day[1]}
+                height={day[2]}
+              />
+            </Link>
+          </div>
         );
       })}
     </>

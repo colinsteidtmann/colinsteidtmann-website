@@ -8,7 +8,7 @@ import Head from "next/head";
 const components = {
   img: (props) => (
     <Image
-      src={require(`../content/${props.src}`)}
+      src={props.src}
       alt={props.alt}
     />
   ),
