@@ -1,0 +1,1 @@
+npx tree-cli tree -l 3 -o output.txt --ignore 'node_modules, lib, components, public, api, data'

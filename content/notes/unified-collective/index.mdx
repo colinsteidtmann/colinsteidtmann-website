@@ -1,0 +1,125 @@
+---
+title: Owning my Content
+description: ""
+date: 1/2/2023
+lastmod: 1/2/2023
+tags: []
+draft: false
+keywords: "mdx"
+---
+
+Textual content is everywhere: websites, notes, books, emails, presentations, developer documentation. It's just presented differently.
+
+It all has a similar structure: Headers, sub-headers, paragraphs, **bolded** and _italicized_ _words_, lists, tables, images, links. The tool you use just may be different.
+
+Word, PDF, HTML, Apple Notes, why is it so hard to convert between them? Why can't it just be plain text?
+
+[Markdown](https://www.markdownguide.org/) and [the unified collective](https://github.com/unifiedjs/unified) is the answer.
+
+## What's Markdown?
+
+Markdown is a universal language that lets you write plain text documents that contain everything that a Word document does, and more.
+
+Instead of using buttons on a property platform, or writing HTML code yourself to add headers and such, you just add a character or two, like a '#' to signify the text is a header. `# Header` `## Subheader`
+
+You then take your plain text document anywhere that supports Markdown (a lot of places these days) and they can render it to look how you want (book, word document, website, etc).
+
+![Markdown Flowchart](notes/unified-collective/markdown-flowchart.png)
+
+## What's the Unified Collective?
+
+Markdown language and syntax needs to be transformed into your final desired format (HTML, PDF, etc), and even vice-versa (HTML to Markdown). The Unified Collective builds the tools to do this.
+
+Transforming content has 3 main steps:
+
+1.  **Parsing**: Content needs to be turned into an "syntax tree" as specified by [unist](https://github.com/syntax-tree/unist). Unist doesn't exactly specify what that is different for content forms like Markdown/HTML input. It just defines a _universal_ abstract syntax tree and expects projects to extend unist for specific languages. Here's popular specifications for different languages:
+
+    - [mdast](https://github.com/syntax-tree/mdast) - Specifies **M**ark**d**own **a**bstract **s**yntax **t**rees.
+    - [hast](https://github.com/syntax-tree/hast) - Specifies HTML abstract syntax trees.
+    - [xast](https://github.com/syntax-tree/xast) - Specifies XML abstract syntax trees.
+    - [esast](https://github.com/syntax-tree/esast) - Specifies JavaScript abstract syntax trees.
+
+    The projects above _still_ only specify **abstract** syntax trees. To get a **concrete** syntax tree there's another collection of projects that do the actual parsing:
+
+    - [remark](https://github.com/remarkjs/remark) for Markdown
+    - [rehype](https://github.com/rehypejs/rehype) for HTML
+    - [retext](https://github.com/retextjs/retext) for natural language
+
+2.  **Transformation**: The syntax trees (usually JSON format) can then be transformed into whatever you want by the ecosystem of **plugins** that exist for the concrete syntax trees.
+
+    -     [remark plugins](https://github.com/remarkjs/remark/blob/main/doc/plugins.md)
+    - [rehype plugins](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md)
+    - [retext plugins](https://github.com/retextjs/retext/blob/main/doc/plugins.md)
+
+    For example, the [remark-pdf](https://github.com/inokawa/remark-pdf) plugin can turn markdown files into PDFs. If a plugin you want doesn't exist, you can [create your own](https://unifiedjs.com/learn/guide/create-a-plugin/). It's easy(ish) since you're working with a _concrete syntax tree_.
+
+    While some plugins can completely change your concrete tree type, like the [remark-rehype](https://github.com/remarkjs/remark-rehype) plugin which turns **mdast** (markdown) trees into **hast** (HTML) trees, other plugins may just change the style by adding extra spaces, or checking for errors (linting) and outputting warning messages.
+
+3.  **Stringify**: The transformed syntax tree is then stringified into its final form (HTML, markdown, prose/natural language). The output depends on the plugins you used.
+
+### An example: transforming markdown to HTML
+
+```javascript
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
+
+main();
+
+async function main() {
+  const file = await unified()
+    .use(remarkParse) // specify the parser for the input file
+    .use(remarkRehype) // turn the mdast tree into a hast tree
+    .use(rehypeSanitize) // use a rehype plugin to ensure the HTML is safe
+    .use(rehypeStringify) // stringify the hast tree into HTML
+    .process("# Hello, Neptune!"); // do the 3 steps: parse, transform, and stringify using the tools above.
+
+  console.log(String(file)); // --> <h1>Hello, Neptune!</h1>
+}
+```
+
+## Markdown's limitations
+
+Standard [CommonMark](https://commonmark.org/) or [GitHub Flavored Markdown](https://github.github.com/gfm/) is great for static text, links and images, but it falls short on interactive content like charts and widgets.
+
+JavaScript and ReactJS library are modern ways to create dynamic and interactive websites. But standard Markdown language doesn't support these.
+
+[MDX](https://mdxjs.com/) extends the markdown syntax with [JSX](https://reactjs.org/docs/introducing-jsx.html) syntax. MDX files use the `.mdx` extension instead of the `.md` extension.
+
+## How to process an MDX file
+
+MDX files can be processed using a long list of remark plugins, starting with [remark-mdx](https://github.com/mdx-js/mdx/tree/main/packages/remark-mdx) which transforms the remark syntax tree (based on the mdast specification) into one that supports the MDX syntax.
+
+You'd then need a lot of plugins afterwards to parse the tree and stringify it into a [JSX Fragment](https://reactjs.org/docs/fragments.html).
+
+Thankfully, the [mdx-js project](https://github.com/mdx-js/mdx) built a collection of packages to help you process an MDX file into React Fragments.
+
+### MDX Processors
+
+There are many MDX processers, but at the root of all of them is the [@mdx-js/mdx](https://mdxjs.com/packages/mdx/) compiler which uses a ton of remark plugins to turn MDX into a JSX Fragment. See the `mdx` [architecture](https://mdxjs.com/packages/mdx/#architecture) for how this works.
+
+However, if you're using a bundler (see my [other note]() on what that is) like webpack, Rollup, or esbuild, then you'll want to use something like the [@mdx-js/loader](https://mdxjs.com/packages/loader/) package. Adding this package into your webpack config will then enable you to import a `.mdx` file and get a React fragment returned.
+
+```jsx
+import Article from "./article.mdx";
+export default function Page() {
+  return <Article />;
+}
+```
+
+But even more, if you're using a site builder like NextJS or Gatsby and you want to link directly to `.mdx` pages as you would for `.html` or `.jsx` pages, then you can use packages like [@next/mdx](https://github.com/vercel/next.js/tree/canary/packages/next-mdx) or [gatsby-plugin-mdx]() which further extend packages like [@mdx-js/loader](https://mdxjs.com/packages/loader/).
+
+Assuming you have `pages/about.mdx`, in NextJS you can do something like:
+
+```jsx
+import Link from "next/link";
+export default function HomePage() {
+  return <Link href="/about">About Page</Link>;
+}
+```
+
+### Processing MDX _On Demand_
+
+Still learning
