@@ -4,11 +4,13 @@ import { PageSEO } from "@/components/SEO";
 import MdxLayout from "@/components/MdxLayout";
 import { formatDate } from "@/lib/utils";
 
+// get all frontmatter for files during build time
 export async function getStaticProps() {
   const notes = getAllFiles();
   return { props: { notes } };
 }
 
+// use array [{frontmatterPro, content}] to show notes nav during runtime
 export default function Notes({ notes }) {
   return (
     <>
@@ -17,7 +19,7 @@ export default function Notes({ notes }) {
         description="Notes I take as I learn/do different things."
         ogType="website"
       />
-      <MdxLayout lastmod={formatDate(notes[0]?.metadata.lastmod)}>
+      <MdxLayout lastmod={formatDate(notes[0]?.frontmatterPro.lastmod)}>
         <h1>Notes</h1>
         <p>
           Notes mainly to remind my future self how to do something or what I
@@ -25,7 +27,7 @@ export default function Notes({ notes }) {
         </p>
         <ul>
           {notes.map((n) => {
-            const { title, date, slug } = n.metadata;
+            const { title, date, slug } = n.frontmatterPro;
             return (
               <li key={slug}>
                 <Link href={`/notes/${slug}`}>

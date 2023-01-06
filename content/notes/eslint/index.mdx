@@ -6,9 +6,9 @@ tags: []
 lastmod: 12/30/2022
 ---
 
-ESLint is a JavaScript package that you can add to your project. It lets you set up rules to self-enforce high quality and consistent code.
+ESLint is a JavaScript package that you can add to your project. It lets you set up rules to self-enforce high-quality and consistent code.
 
-_It won't do anything unless you extend some else's config file or explicitly turn on rules in your config file._
+_It won't do anything unless you extend someone else's config file or explicitly turn on rules in your config file._
 
 ## Quick Start and basic knowledge needed
 
@@ -95,7 +95,7 @@ Note, plugins require you to add the rules manually, if you don't want to do thi
 
 #### Sharable Config Files ([source](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#extending-configuration-files))
 
-Manually adding rules and importing plugins gets tedious. Skip the work by extending someone else's config file which already include plugins and rules declared. Eg. [`eslint:recommended`](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#using-eslintrecommended) which comes with the `eslint` package or ones you've installed like [`eslint-config-airbnb`](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb). Extending a config file also imports their plugins. Below, we extend the Airbnb config file which includes the react and react-hook plugins so we don't need to manually install or declare them anymore, aka we can ~~`"plugins": ["react"]`~~!
+Manually adding rules and importing plugins gets tedious. Skip the work by extending someone else's config file which already includes plugins and rules declared. Eg. [`eslint: recommended`](https://eslint.org/docs/latest/user-guide/configuring/configuration-files#using-eslintrecommended) which comes with the `eslint` package or ones you've installed like [`eslint-config-airbnb`](https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb). Extending a config file also imports their plugins. Below, we extend the Airbnb config file which includes the react and react-hook plugins so we don't need to manually install or declare them anymore, aka we can ~~`"plugins": ["react"]`~~!
 
 ```javascript
 module.exports = {
@@ -131,7 +131,7 @@ module.exports = {
     "env": {
         "browser": true,
         "node": true,
-        "es6":true
+        "es6": true
     }
     (...)
 }
@@ -139,7 +139,7 @@ module.exports = {
 
 ### Parser Options
 
-Tell ESLint what syntax you're using. ES3-ES5 is ESLint's default but ES6/ES2015 and beyond is modern day JavaScript. Specifying `module` is important if you use `import`/`export` and `jsx` is important if you're using React.
+Tell ESLint what syntax you're using. ES3-ES5 is ESLint's default but ES6/ES2015 and beyond are modern-day JavaScript. Specifying `module` is important if you use `import`/`export` and `jsx` is important if you're using React.
 
 ```javascript
 module.exports = {
@@ -156,9 +156,9 @@ module.exports = {
 
 ### Custom rules
 
-It's gets fairly involved, here's [a good article](https://stevenpetryk.com/blog/custom-eslint-rules/) on it.
+It gets fairly involved, here's [a good article](https://stevenpetryk.com/blog/custom-eslint-rules/) on it.
 
-## My personal setup for a NextJS Website
+## My setup for a NextJS Website
 
 ### Config files I extend:
 
@@ -170,7 +170,7 @@ It's gets fairly involved, here's [a good article](https://stevenpetryk.com/blog
 - [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) OR [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier#recommended-configuration)
   - Add this last so that prettier can override other configs.
   - Run the prettier script (`prettier --write`) _before_ the ESLint script (`eslint --fix`) or else you'll get issues when the prettier format conflicts with your ESLint rules.
-    - A package called [prettier-eslint](https://github.com/prettier/prettier-eslint) will do these this for you (running Prettier then ESLint) but it's easy enough to do it yourself.
+    - A package called [prettier-eslint](https://github.com/prettier/prettier-eslint) will do this for you (running Prettier then ESLint) but it's easy enough to do it yourself.
 
 #### .eslintrc.json
 

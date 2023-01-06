@@ -7,6 +7,7 @@ import { mdxBundle } from "@/lib/bundler";
 import { useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 
+// At build time, generate a map of all possible paths
 export async function getStaticPaths() {
   const slugs = getSlugs();
   return {
@@ -21,14 +22,16 @@ export async function getStaticPaths() {
   };
 }
 
+// Compiles mdx document based on the slug during build time.
 export async function getStaticProps({ params }) {
   const slug = params.slug;
-  const { code, metadata } = await mdxBundle(slug);
-  return { props: { code, metadata } };
+  const { code, frontmatterPro } = await mdxBundle(slug);
+  return { props: { code, frontmatterPro } };
 }
 
-export default function SpecificNote({ code, metadata }) {
-  const { title, date, lastmod, slug, description, keywords } = metadata;
+// Renders page for a specific note
+export default function SpecificNote({ code, frontmatterPro }) {
+  const { title, date, lastmod, slug, description, keywords } = frontmatterPro;
   const Component = useMemo(() => getMDXComponent(code), [code]);
   return (
     <>

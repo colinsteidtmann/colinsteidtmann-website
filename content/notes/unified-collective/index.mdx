@@ -8,9 +8,9 @@ draft: false
 keywords: "mdx"
 ---
 
-Textual content is everywhere: websites, notes, books, emails, presentations, developer documentation. It's just presented differently.
+Textual content is everywhere: websites, notes, books, emails, presentations, and developer documentation. It's just presented differently.
 
-It all has a similar structure: Headers, sub-headers, paragraphs, **bolded** and _italicized_ _words_, lists, tables, images, links. The tool you use just may be different.
+It all has a similar structure: Headers, sub-headers, paragraphs, **bolded** and _italicized_ _words_, lists, tables, images, and links. The tool you use just may be different.
 
 Word, PDF, HTML, Apple Notes, why is it so hard to convert between them? Why can't it just be plain text?
 
@@ -18,21 +18,21 @@ Word, PDF, HTML, Apple Notes, why is it so hard to convert between them? Why can
 
 ## What's Markdown?
 
-Markdown is a universal language that lets you write plain text documents that contain everything that a Word document does, and more.
+Markdown is a universal language that lets you write plain text documents that contain everything that a Word document does and _more_.
 
 Instead of using buttons on a property platform, or writing HTML code yourself to add headers and such, you just add a character or two, like a '#' to signify the text is a header. `# Header` `## Subheader`
 
 You then take your plain text document anywhere that supports Markdown (a lot of places these days) and they can render it to look how you want (book, word document, website, etc).
 
-![Markdown Flowchart](./markdown-flowchart.png)
+![Markdown Flowchart](https://mdg.imgix.net/assets/images/markdown-flowchart.png?auto=format&fit=clip&q=40&w=1080)
 
 ## What's the Unified Collective?
 
-Markdown language and syntax needs to be transformed into your final desired format (HTML, PDF, etc), and even vice-versa (HTML to Markdown). The Unified Collective builds the tools to do this.
+Markdown language and syntax need to be transformed into your final desired format (HTML, PDF, etc), and even vice-versa (HTML to Markdown). The Unified Collective builds the tools to do this.
 
 Transforming content has 3 main steps:
 
-1.  **Parsing**: Content needs to be turned into an "syntax tree" as specified by [unist](https://github.com/syntax-tree/unist). Unist doesn't exactly specify what that is different for content forms like Markdown/HTML input. It just defines a _universal_ abstract syntax tree and expects projects to extend unist for specific languages. Here's popular specifications for different languages:
+1.  **Parsing**: Content needs to be turned into a "syntax tree" as specified by [unist](https://github.com/syntax-tree/unist). Unist doesn't exactly specify what a syntax tree is for different content forms like Markdown/HTML input. It just defines a _universal_ abstract syntax tree and expects projects to extend unist for specific languages. Here are popular specifications for different languages:
 
     - [mdast](https://github.com/syntax-tree/mdast) - Specifies **M**ark**d**own **a**bstract **s**yntax **t**rees.
     - [hast](https://github.com/syntax-tree/hast) - Specifies HTML abstract syntax trees.
@@ -82,9 +82,9 @@ async function main() {
 
 ## Markdown's limitations
 
-Standard [CommonMark](https://commonmark.org/) or [GitHub Flavored Markdown](https://github.github.com/gfm/) is great for static text, links and images, but it falls short on interactive content like charts and widgets.
+Standard [CommonMark](https://commonmark.org/) or [GitHub Flavored Markdown](https://github.github.com/gfm/) is great for static text, links, and images, but it falls short on interactive content like charts and widgets.
 
-JavaScript and ReactJS library are modern ways to create dynamic and interactive websites. But standard Markdown language doesn't support these.
+JavaScript and ReactJS libraries are modern ways to create dynamic and interactive websites. But standard Markdown language doesn't support these.
 
 [MDX](https://mdxjs.com/) extends the markdown syntax with [JSX](https://reactjs.org/docs/introducing-jsx.html) syntax. MDX files use the `.mdx` extension instead of the `.md` extension.
 
@@ -92,7 +92,7 @@ JavaScript and ReactJS library are modern ways to create dynamic and interactive
 
 MDX files can be processed using a long list of remark plugins, starting with [remark-mdx](https://github.com/mdx-js/mdx/tree/main/packages/remark-mdx) which transforms the remark syntax tree (based on the mdast specification) into one that supports the MDX syntax.
 
-You'd then need a lot of plugins afterwards to parse the tree and stringify it into a [JSX Fragment](https://reactjs.org/docs/fragments.html).
+You'd then need a lot of plugins afterward to parse the tree and stringify it into a [JSX Fragment](https://reactjs.org/docs/fragments.html).
 
 Thankfully, the [mdx-js project](https://github.com/mdx-js/mdx) built a collection of packages to help you process an MDX file into React Fragments.
 
@@ -122,4 +122,201 @@ export default function HomePage() {
 
 ### Processing MDX _On Demand_
 
-Still learning
+Linking to MDX pages directly is great (as with `@next/mdx` or `gatsby-plugin-mdx`) but what if your `.mdx` file is in a remote repository, or if you don't know the page ahead of time because you're doing [dynamic routing](https://nextjs.org/docs/routing/dynamic-routes) (importing files during runtime)? This was my issue, I had a NextJS project structure laid out like this:
+
+```bash
+├── content
+|  └── notes
+|     ├── about
+|     └──  index.mdx
+|     └──  photo.png
+|     └──  component.js
+├── pages
+|  ├── index.js
+|  ├── notes
+|  |  ├── index.js
+|  |  └── [slug].js
+|  ├── _app.js
+|  └── _document.js
+```
+
+Inside `notes/[slug].js` I was doing dynamic routing to get the MDX note based on the URL route:
+
+```javascript
+import { getFileBySlug, getSlugs } from "@/lib/mdx";
+import MdxLayout from "@/components/MdxLayout";
+
+export async function getStaticPaths() {
+  const slugs = getSlugs();
+  return {
+    paths: slugs.map((slug) => {
+      params: {
+        slug: slug;
+      }
+    }),
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const slug = params.slug;
+  let { content, metadata } = getFileBySlug(slug);
+  return { props: { content, metadata } };
+}
+
+export default function SpecificNote({ content, metadata }) {
+  const { title } = metadata;
+  return (
+    <MdxLayout>
+      <h1>{title}</h1>
+      // MDX content rendered somehow?????????????
+    </MdxLayout>
+  );
+}
+```
+
+For rendering, I start with the `content` variable which is the raw text from the `.mdx` file. I need to convert this into a [`react fragment`](https://reactjs.org/docs/fragments.html) which contains HTML and JavaScript. Luckily, three popular projects can do this:
+
+#### Comparing Three popular MDX on-demand packages
+
+- [`@mdx-js/mdx`](https://github.com/mdx-js/mdx/tree/main/packages/mdx)
+- [`next-mdx-remote`](https://github.com/hashicorp/next-mdx-remote)
+- [`mdx-bundler`](https://github.com/kentcdodds/mdx-bundler)
+  <small>Note, the latter two extend the original `@mdx-js/mdx` package.</small>
+
+So which do I choose? Here's an overview of what each does:
+
+- `@mdx-js/mdx`
+  - 1. [Parse](https://github.com/micromark/micromark) MDX (serialized markdown with [embedded JSX](https://github.com/micromark/micromark-extension-mdxjs), ESM, and expressions) to [mdast](https://github.com/syntax-tree/mdast) (markdown syntax tree)
+  - 2.  [Transform](https://github.com/remarkjs/remark/blob/main/doc/plugins.md#list-of-plugins) through remark (markdown ecosystem)
+  - 3.  [Transform](https://github.com/syntax-tree/mdast-util-to-hast) mdast to [hast](https://github.com/syntax-tree/hast) (HTML syntax tree)
+  - 4.  [Transform](https://github.com/rehypejs/rehype/blob/main/doc/plugins.md#list-of-plugins) through rehype (HTML ecosystem)
+  - 5.  [Transform](https://github.com/syntax-tree/hast-util-to-estree) hast to [esast](https://github.com/syntax-tree/esast) (JS syntax tree)
+  - 6.  Do the [work](https://mdxjs.com/packages/mdx/#api) needed to get a [component](https://github.com/syntax-tree/hast-util-to-estree)
+  - 7.  Transform through recma (JS ecosystem)
+  - 8.  [Serialize](https://github.com/davidbonnet/astring) [esast](https://github.com/syntax-tree/esast) as JavaScript
+  - The final output after [`compile`](https://mdxjs.com/packages/mdx/#compilefile-options) and [`run`](https://mdxjs.com/packages/mdx/#runfunctionbody-options) is a JSX fragment that we can use directly.
+- `next-mdx-remote`
+  - 1. [Serializes()](https://github.com/hashicorp/next-mdx-remote/blob/main/src/serialize.ts) the MDX by removing imports and exports from your MDX file and then calling `compile()` from `@mdx-js/mdx` which does steps 1-8 above and return a JSX Fragment as a string.
+  - 2.  Renders the MDX with its [MDXRemote](https://github.com/hashicorp/next-mdx-remote/blob/main/src/index.tsx) component that takes a few options:
+    - `source`: the serialized MDX string
+    - `lazy`: boolean, if true it returns an empty div while the React component is created from the source string.
+    - `components`: lets you pass components for a specific MDX file you're rendering
+  - This is essentially abstracts a few steps you'd have to do and figure out if you had used the `@mdx-js/mdx` directly, not much more.
+- `mdx-bundler`
+  - 1. Creates a custom [esbuild](https://esbuild.github.io/) plugin using a variety of config options you give it.
+  - 2. Then creates a [config](https://esbuild.github.io/api/) for esbuild using its plugin, the [`@mdx-js/esbuild`](https://github.com/mdx-js/mdx/tree/main/packages/esbuild) plugin, and the extra esbuild config options you pass to it.
+  - 3.  Bundles your MDX file and returns a React component + frontmatter for you to use (b/c it includes the [`remark-frontmatter`](https://github.com/remarkjs/remark-frontmatter) plugin by default).
+  - The key value prop of this package over the two above is that it lets you use import/export inside your MDX file. Importing/exporting is code-splitting, which requires bundlers like webpack or esbuild to find the files and piece them together.
+  - The downside is that you're adding another bundler (`esbuild`) to your project which makes this package a bit heavy.
+
+#### The package I chose
+
+I settled for `mdx-bundler.` _Here's why_:
+
+- To recap, I had a folder `content/notes/[slug]/` with files: `index.mdx`, `photo.png`, `ButtonComponent.js`. The `.mdx` file is written in plain text but it's supposed to be rendered with the pictures and the JavaScript it imports.
+- I wanted to get the rendered package on the fly. Using the URL I'd match it to a "slug" and specific note.
+- Although dynamically importing files with, `await import("content/notes/slug/index.mdx")` and using the `@next/mdx` webpack loader returns a React component, it has to be done fully on the **client-side** because NextJS only allows static and serializable content to be passed as props to pages. Thus, _I can't use the default MDX loaders._
+- The two packages: `@mdx-js/mdx` and `next-mdx-remote` let you [compile](https://mdxjs.com/packages/mdx/#use) `.mdx` files into a JavaScript that builds and by default exports a React component when you run it. Thus, _while you can_ stringify this and pass it as a prop to pages, _you can't_ import pictures or components inside your `.mdx` files because these packages aren't bundlers so they can't resolve imports/exports.
+- So, I'm left with `mdx-bundler`. Despite its large size, it does everything I need it to:
+  - [x] I can store and use pictures and components right alongside the `.mdx` pages. My content can be anywhere.
+  - [x] I can compile `.mdx` files during build time inside `getStaticProps()` (the most computationally expensive work) and then construct the React component quickly on the client-side during runtime.
+
+#### The final result
+
+Same file structure as described above, here's what I wrote:
+
+```javascript
+import MdxLayout from "@/components/MdxLayout";
+import { formatDate } from "@/lib/utils";
+import { useMemo } from "react";
+import path from "path";
+import { bundleMDX } from "mdx-bundler";
+import { getMDXComponent } from "mdx-bundler/client";
+import remarkGfm from "remark-gfm";
+import remarkMdxImages from "remark-mdx-images";
+
+// at build time, generate a map of all possible paths
+export async function getStaticPaths() {
+  const slugs = getSlugs();
+  return {
+    paths: slugs.map((slug) => {
+      return { params: { slug: slug } };
+    }),
+    fallback: false,
+  };
+}
+
+// at build time, map every path with ready-to-construct mdx component
+export async function getStaticProps({ params }) {
+  const slug = params.slug; // URL keyword (eg. "about")
+  const slugDir = path.join(process.cwd(), "content", "notes", slug); // content/notes/about
+  const publicDir = path.join(process.cwd(), "public", "static"); // public/static
+
+  let loaderImages = {}; // {".png":"file", ".jpg":"file"}
+  [".png", ".jpg"].forEach((ext) => (loaderImages[ext] = "file"));
+
+  const { code, frontmatter } = await bundleMDX({
+    file: `${slugDir}/index.mdx`, // entry point for esbuild to start resolving imports/exports
+    cwd: `${slugDir}/`, // relative path that imports/exports will be using, like "./photo.png"
+    bundleDirectory: `${publicDir}/notes/${slug}/`, // bundle images into this public folder
+    bundlePath: `/static/notes/${slug}/`, // load all images with the prefix public subfolder prefix
+    esbuildOptions: (options) => {
+      options.loader = {
+        ...options.loader, // custom mdx-bundler and @mdx/esbuild loader
+        ...loaderImages, // our images are interpreted as files
+        ".js": "jsx", //  .js files should be treated as .jsx files so they can export components
+      };
+      options.target = [
+        // bundle to older js syntax so that older browsers support it
+        "es2020",
+        "chrome58",
+        "firefox57",
+        "node12",
+        "safari11",
+      ];
+      options.define = {
+        "process.env": JSON.stringify(process.env), // share  environment variables with esbuild
+      };
+      return options;
+    },
+    mdxOptions(options) {
+      // this is the recommended way to add custom remark/rehype plugins:
+      // The syntax might look weird, but it protects you in case we add/remove
+      // plugins in the future.
+      options.remarkPlugins = [
+        ...(options.remarkPlugins ?? []),
+        remarkGfm,
+        remarkMdxImages,
+      ];
+      options.rehypePlugins = [...(options.rehypePlugins ?? [])];
+
+      return options;
+    },
+  });
+
+  return { code, metadata: getMetadata(slug, frontmatter) };
+}
+
+// at runtime, construct the mdx component only when the code prop changes
+export default function SpecificNote({ code, frontmatter }) {
+  const { title, lastmod } = frontmatter;
+  const Component = useMemo(() => getMDXComponent(code), [code]);
+  return (
+    <>
+      <MdxLayout lastmod={formatDate(lastmod)}>
+        <h1>{title}</h1>
+        <Component />
+      </MdxLayout>
+    </>
+  );
+}
+```
+
+## Conclusion
+
+Learning about MDX and specifically how to process it on-demand forced me to dive in deep on how `@mdx-js/mdx`, `next`, and bundlers like `esbuild` and `webpack` work under the hood.
+
+I learned about abstract syntax trees (great [AST visualizer](https://astexplorer.net/)), how to build a [simplified bundler](https://github.com/ronami/minipack), and came across new, to me, JavaScript [syntax](<(https://github.com/mdx-js/mdx/blob/main/packages/mdx/lib/run.js#L15)>) - `new AsyncFunction(String(file))(options)` - and JavaScript packages ([`string_decoder`](https://github.com/kentcdodds/mdx-bundler/blob/main/src/index.js#L3), [`Reflect`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)) that I had to [parse](https://nodejs.org/dist/v8.9.4/docs/api/string_decoder.html) or [ask the community](https://github.com/mdx-js/mdx/discussions/2202).
+
+Overall, it was a fun way to spend a week of my Christmas break.
