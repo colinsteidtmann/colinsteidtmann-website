@@ -1,12 +1,14 @@
 ---
 title: Owning my Content
 description: ""
-date: 1/2/2023
-lastmod: 1/2/2023
+date: 1/6/2023
+lastmod: 1/6/2023
 tags: []
 draft: false
 keywords: "mdx"
 ---
+
+## Table of Contents
 
 Textual content is everywhere: websites, notes, books, emails, presentations, and developer documentation. It's just presented differently.
 
@@ -100,7 +102,7 @@ Thankfully, the [mdx-js project](https://github.com/mdx-js/mdx) built a collecti
 
 There are many MDX processers, but at the root of all of them is the [@mdx-js/mdx](https://mdxjs.com/packages/mdx/) compiler which uses a ton of remark plugins to turn MDX into a JSX Fragment. See the `mdx` [architecture](https://mdxjs.com/packages/mdx/#architecture) for how this works.
 
-However, if you're using a bundler (see my [other note]() on what that is) like webpack, Rollup, or esbuild, then you'll want to use something like the [@mdx-js/loader](https://mdxjs.com/packages/loader/) package. Adding this package into your webpack config will then enable you to import a `.mdx` file and get a React fragment returned.
+However, if you're using a bundler (see my [other note](/notes/modern-websites) on what that is) like webpack, Rollup, or esbuild, then you'll want to use something like the [@mdx-js/loader](https://mdxjs.com/packages/loader/) package. Adding this package into your webpack config will then enable you to import a `.mdx` file and get a React fragment returned.
 
 ```jsx
 import Article from "./article.mdx";
@@ -177,7 +179,7 @@ export default function SpecificNote({ content, metadata }) {
 
 For rendering, I start with the `content` variable which is the raw text from the `.mdx` file. I need to convert this into a [`react fragment`](https://reactjs.org/docs/fragments.html) which contains HTML and JavaScript. Luckily, three popular projects can do this:
 
-#### Comparing Three popular MDX on-demand packages
+#### Comparing Three popular MDX on demand packages
 
 - [`@mdx-js/mdx`](https://github.com/mdx-js/mdx/tree/main/packages/mdx)
 - [`next-mdx-remote`](https://github.com/hashicorp/next-mdx-remote)

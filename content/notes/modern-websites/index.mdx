@@ -1,0 +1,67 @@
+---
+title: How modern websites work
+
+description: 4 common parts of modern-day websites.
+
+date: 1/5/2023
+
+tags: []
+
+lastmod: 1/5/2023
+---
+
+4 common parts of modern-day websites.
+
+## Transpiling/Compiling
+
+- Modern websites use JavaScript.
+
+- Browsers run the javascript using “just-in-time” compilers. These compilers turn developer-friendly JS code into computer-friendly machine code.
+
+- However, JavaScript had evolved over the years, and not every browser is up-to-date with the latest syntax changes, especially when JavaScript added a bunch of features in 2015 and [transitioned](https://hacks.mozilla.org/2015/08/es6-in-depth-modules/) from version ES5 to ES6/ES2016.
+
+- **Transpilers/Compilers**, like [Babel](https://babeljs.io/) or the fast Rust-written [SWC](https://swc.rs/), [transpile](https://en.wikipedia.org/wiki/ECMAScript#Transpiling) modern JS code into older JS code.
+
+- **NextJS** uses the SWC compiler. They compile the code when you test it and build your project for production.
+
+## Minifying
+
+- “Minification is the process of removing unnecessary code formatting and comments without changing the code’s functionality. " ([source](https://nextjs.org/learn/foundations/how-nextjs-works/minifying): NextJS)
+
+- NextJS uses the SWC minifier.
+
+## Bundling
+
+- Modern web apps break their code across multiple files and import/export things.
+
+- Bundling is grouping these separate chunks of code into one file.
+
+- There are a bunch of options: [esbuild](https://esbuild.github.io/), [rollup](https://rollupjs.org/guide/en/), [webpack](https://webpack.js.org/), SWC ([swcpack](https://swc.rs/docs/usage/bundling)), and [turbopack](https://turbo.build/pack).
+
+- As of NextJS version 13, they’re using Rust-written turbopack. Prior they used webpack.
+
+## Code Splitting
+
+- Developers split webpage code across different files. Different files import similar and different things from one another.
+
+- Bundlers bundles code for files that have similar imports, reducing the total number of bundles and redundant code that users would have to load.
+
+## Compiling
+
+- Compiling is taking developer-friendly code in one language (Javascript) and outputting it in a computer-friendly format, one that browsers understand.
+
+- NextJS does compiling while you develop and test your code and when you build it for production. ([source](https://nextjs.org/learn/foundations/how-nextjs-works/compiling))
+
+- NextJS has its compiler (SWC) written in Rust
+
+## Rendering
+
+- Rendering is showing the user the UI, the HTML styled w/CSS.
+
+- Dynamic websites use JavaScript to make the UI interactive and render different things.
+
+- The UI can be _pre-rendered_ or _client-side_ rendered.
+
+- Pre-rendering can be done by a call to a server that returns the HTML, or by using **getStaticProps** in NextJS which gets all the things the webpage needs at **build time** so that NextJS can include the UI in the bundles.
+
+- Client-side rendering is rendering on the fly, meaning users have to wait for the javascript to run and fill the webpage with HTML.

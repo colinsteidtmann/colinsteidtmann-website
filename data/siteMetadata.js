@@ -1,22 +1,22 @@
 const siteMetadata = {
-    title: "Colin Steidtmann",
-    author: "Colin Steidtmann",
-    description: "Colin's personal site with notes and more.",
-    language: "en-us",
-    //theme: "system", // system, dark or light
-    siteUrl: "https://www.colinsteidtmann.com",
-    siteRepo: "https://github.com/colinsteidtmann/colinsteidtmann-website",
-    siteLogo: "/images/circleLogoNoBG.png",
-    image: "/images/avatar.png",
-    socialBanner: "/images/socialBanner.png",
-    email: "colinsteidtmann@gmail.com",
-    github: "https://github.com/colinsteidtmann",
-    twitter: "https://twitter.com/SteidtmannColin",
-    facebook: "https://www.facebook.com/colinsteidtmann",
-    youtube: "https://www.youtube.com/@colinsteidtmann",
-    linkedin: "https://www.linkedin.com/in/colinsteidtmann",
-    locale: "en-US",
-    /*analytics: {
+  title: "Colin Steidtmann",
+  author: "Colin Steidtmann",
+  description: "Colin's personal site with notes and more.",
+  language: "en-us",
+  //theme: "system", // system, dark or light
+  siteUrl: "https://www.colinsteidtmann.com",
+  siteRepo: "https://github.com/colinsteidtmann/colinsteidtmann-website",
+  siteLogo: "/images/circleLogoNoBG.png",
+  image: "/images/avatar.png",
+  socialBanner: "/images/socialBanner.png",
+  email: "colinsteidtmann@gmail.com",
+  github: "https://github.com/colinsteidtmann",
+  twitter: "https://twitter.com/SteidtmannColin",
+  facebook: "https://www.facebook.com/colinsteidtmann",
+  youtube: "https://www.youtube.com/@colinsteidtmann",
+  linkedin: "https://www.linkedin.com/in/colinsteidtmann",
+  locale: "en-US",
+  /*analytics: {
             // If you want to use an analytics provider you have to add it to the
             // content security policy in the `next.config.js` file.
             // supports plausible, simpleAnalytics, umami or googleAnalytics

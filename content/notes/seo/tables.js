@@ -5,10 +5,7 @@ export function Table({ contents }) {
       <thead>
         <tr>
           {contents.thead.map((header, idx) => (
-            <th
-              align={contents.tdAlign[idx]}
-              key={header}
-            >
+            <th align={contents.tdAlign[idx]} key={header}>
               {header}
             </th>
           ))}
@@ -19,10 +16,7 @@ export function Table({ contents }) {
           return (
             <tr key={row}>
               {row.map((value, idx) => (
-                <td
-                  align={contents.tdAlign[idx]}
-                  key={value}
-                >
+                <td align={contents.tdAlign[idx]} key={value}>
                   {value}
                 </td>
               ))}

@@ -8,14 +8,8 @@ export default function AllPosts() {
         return (
           <div key={day[0]}>
             <h3>{`Day ${day[0]}`}</h3>
-            <Link
-              href={day[1]}
-              className="cursor-pointer"
-            >
-              <FacebookPost
-                href={day[1]}
-                height={day[2]}
-              />
+            <Link href={day[1]} className="cursor-pointer">
+              <FacebookPost href={day[1]} height={day[2]} />
             </Link>
           </div>
         );
