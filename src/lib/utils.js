@@ -4,9 +4,9 @@
  * @returns date to locale date string
  */
 export function formatDate(date) {
-  return date
-    ? new Date(date).toLocaleDateString()
-    : new Date().toLocaleDateString();
+    return date
+        ? new Date(date).toLocaleDateString()
+        : new Date().toLocaleDateString();
 }
 
 /**
@@ -16,5 +16,5 @@ export function formatDate(date) {
  * @returns 1 if file 1 comes before file 2, -1 if opposite
  */
 export function sortDesc(file1, file2) {
-  return file1.frontmatterPro.date < file2.frontmatterPro.date ? 1 : -1;
+    return file1.frontmatterPro.date < file2.frontmatterPro.date ? 1 : -1;
 }

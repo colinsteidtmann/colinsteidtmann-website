@@ -1,12 +1,12 @@
-import { getSlugs } from "@/lib/mdx";
+import { getSlugs } from "@/lib/files";
 import { NoteSEO } from "@/components/SEO";
 import siteMetadata from "@/data/siteMetadata";
 import MdxLayout from "@/components/MdxLayout";
 import { formatDate } from "@/lib/utils";
-import { mdxBundle } from "@/lib/bundler";
+import { mdxBundle } from "@/lib/mdx";
 import { useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
-
+import { useMDXComponents } from "@mdx-js/react";
 // At build time, generate a map of all possible paths
 export async function getStaticPaths() {
   const slugs = getSlugs();
@@ -32,7 +32,7 @@ export async function getStaticProps({ params }) {
 // Renders page for a specific note
 export default function SpecificNote({ code, frontmatterPro }) {
   const { title, date, lastmod, slug, description, keywords } = frontmatterPro;
-  const Component = useMemo(() => getMDXComponent(code), [code]);
+  const Component = useMemo(() => getMDXComponent(code, { mdxComponents: { useMDXComponents } }), [code]);
   return (
     <>
       <NoteSEO

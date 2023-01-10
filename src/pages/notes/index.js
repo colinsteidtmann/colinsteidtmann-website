@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllFiles } from "@/lib/mdx";
+import { getAllFiles } from "@/lib/files";
 import { PageSEO } from "@/components/SEO";
 import MdxLayout from "@/components/MdxLayout";
 import { formatDate } from "@/lib/utils";
