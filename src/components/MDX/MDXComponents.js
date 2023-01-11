@@ -2,12 +2,30 @@ import Image from "next/image";
 import Link from "next/link";
 import InlineCode from "./InlineCode";
 
-function Img(props) {
+const IMG = (props) => {
     return <Image src={require(`public/static/notes/${props.src}`)} alt={props.alt} />;
-}
+};
+
+const LINK = (props) => {
+    const customProps = {
+        className: "text-blue-900",
+        ...props
+    };
+    if (props.href.indexOf("http")) return <a {...customProps} />;
+    return <Link {...customProps} />;
+};
+
+const PRE = (props) => {
+    return <pre
+        className="rounded-lg bg-white shadow-lg text-black"
+        {...props}
+    />;
+};
+
 
 export const MDXComponents = {
-    link: (props) => <Link href={props.href} {...props} />,
-    img: Img,
+    a: LINK,
+    img: IMG,
     code: InlineCode,
+    pre: PRE
 };
