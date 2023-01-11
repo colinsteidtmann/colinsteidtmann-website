@@ -4,7 +4,6 @@ import { MDXProvider } from "@mdx-js/react";
 import { MDXComponents } from "@/components/MDX/MDXComponents";
 import Head from "next/head";
 
-
 function MyApp({ Component, pageProps }) {
   return (
     <>

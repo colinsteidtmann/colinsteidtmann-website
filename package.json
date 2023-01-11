@@ -10,10 +10,10 @@
     "build": "next build",
     "start": "next start",
     "sitemap": "node scripts/generate-sitemap.js",
-    "eslint-check": "eslint .",
+    "lint": "eslint .",
     "eslint-fix": "eslint . --fix",
     "prettier-check": "prettier --check .",
-    "prettier-write": "prettier --write .",
+    "prettier": "prettier --write .",
     "clean": "prettier --write . && eslint . --fix"
   },
   "dependencies": {

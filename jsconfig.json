@@ -6,11 +6,13 @@
       "@/content/*": ["src/content/*"],
       "@/data/*": ["data/*"],
       "@/notes/*": ["src/content/notes/*"],
-      "@/author/*": ["arc/content/author/*"],
+      "@/author/*": ["src/content/author/*"],
       "@/lib/*": ["src/lib/*"],
       "@/pages/*": ["src/pages/*"],
       "@/public/*": ["public/*"],
-      "@/styles/*": ["src/styles/*"]
+      "@/styles/*": ["src/styles/*"],
+      "@/plugins/*": ["plugins/*"],
+      "@/scripts/*": ["scripts/*"]
     }
   }
 }

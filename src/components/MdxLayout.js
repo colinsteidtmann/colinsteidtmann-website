@@ -1,17 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-/**
- * Layout for the entire site
- * @param {JSX} children React children components
- * @param {Date} lastmod Last time this page was modified
- */
+
+// Layout for MDX Posts
 export default function MdxLayout({ children, lastmod }) {
   const router = useRouter();
   const path = router.asPath;
   const pathParts = path.split("/").slice(1);
   const pathLinks = pathParts.map((part) => {
-    part = part.indexOf("#") != -1 ? part.substring(0, part.indexOf("#")) : part;
+    part =
+      part.indexOf("#") != -1 ? part.substring(0, part.indexOf("#")) : part;
     return {
       href: path.substring(0, path.indexOf(part)) + part,
       part: part,
