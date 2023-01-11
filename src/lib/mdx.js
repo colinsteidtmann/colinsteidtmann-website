@@ -21,7 +21,7 @@ export async function mdxBundle(slug) {
         file: `${slugDir}/index.mdx`, // entry point for esbuild to start resolving imports/exports
         cwd: `${slugDir}/`, // relative path that imports/exports will be using, like "./photo.png"
         bundleDirectory: `${publicDir}/notes/${slug}/`, // bundle images into this public folder
-        bundlePath: `/static/notes/${slug}/`, // load all images with the prefix public subfolder prefix
+        bundlePath: slug, // load all images with the prefix public subfolder prefix
         esbuildOptions: (options) => {
             options.loader = {
                 ...options.loader, // custom mdx-bundler and @mdx/esbuild loader

@@ -8,6 +8,6 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/content/**/*.mdx",
   ],
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 };
 
