@@ -12,21 +12,9 @@ export function getSlugs() {
     return files;
 }
 
-// sort slugs descending order
-export function sortSlugs(slugs) {
-    const sortedSlugs = slugs.map((slug) => getFileBySlug(slug))
-        .sort((file1, file2) => sortDesc(file1, file2));
-    return sortSlugs;
-}
 
 // make frontmatter uniform for all files
-export function getFrontmatterPro(slug, frontmatter) {
-    const sortedSlugs = sortSlugs(getSlugs());
-    const myIdx = sortedSlugs.indexOf(slug);
-    const nextSlug = sortSlugs[myIdx - 1];
-    const previousSlug = sortSlugs[myIdx + 1];
-    const nextFile = nextSlug ? getFileBySlug(nextSlug) : null;
-    const prevFile = previousSlug ? getFileBySlug(previousSlug) : null;
+export function getFrontmatterPro(slug, frontmatter, toc) {
     const today = new Date().toISOString();
     frontmatter.date &&
         (frontmatter.date = new Date(frontmatter.date).toISOString());
@@ -38,11 +26,12 @@ export function getFrontmatterPro(slug, frontmatter) {
         description: "Default Description",
         date: today,
         lastmod: today,
+        toc: toc || [],
         tags: [],
         keywords: [],
         draft: false,
-        nextFile: nextFile,
-        prevFile: prevFile
+        nextFile: null, // must be added
+        prevFile: null, // must be added
     };
     return {
         ...defaultReturn,
@@ -50,16 +39,30 @@ export function getFrontmatterPro(slug, frontmatter) {
     };
 }
 
-// get frontmatter and file contents for a mdx file
+// returns prevFile and nextFile for a file's slug
+export function getNextAndPrev(slug, sortedFiles) {
+    const myIdx = sortedFiles.findIndex((file) => file.frontmatter.slug == slug);
+    const nextFile = sortedFiles[myIdx - 1] || null;
+    const prevFile = sortedFiles[myIdx + 1] || null;
+    return { nextFile, prevFile };
+}
+
+// get frontmatter and file contents for a mdx file, contents is raw markup!!
 export function getFileBySlug(slug) {
     const filePath = path.join(notesDir, slug, "index.mdx");
     const fileContents = fs.readFileSync(filePath, "utf8");
     const { data: frontmatter, content } = matter(fileContents);
-    return { frontmatterPro: getFrontmatterPro(slug, frontmatter), content };
+    return { frontmatter: getFrontmatterPro(slug, frontmatter), content };
 }
 
-// get files, including their frontmatter and more
+// get files, including their frontmatter and raw markdown!!
 export function getAllFiles() {
-    const files = sortSlugs(getSlugs());
-    return files;
+    const files = getSlugs().map((slug) => getFileBySlug(slug));
+    return sortFiles(files);
+}
+
+// sort files descending
+export function sortFiles(files) {
+    const sortedFiles = files.sort((file1, file2) => sortDesc(file1, file2));
+    return sortedFiles;
 }

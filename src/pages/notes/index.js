@@ -19,7 +19,7 @@ export default function Notes({ notes }) {
         description="Notes I take as I learn/do different things."
         ogType="website"
       />
-      <MdxLayout lastmod={formatDate(notes[0]?.frontmatterPro.lastmod)}>
+      <MdxLayout lastmod={formatDate(notes[0]?.frontmatter.lastmod)}>
         <h1>Notes</h1>
         <p>
           Notes mainly to remind my future self how to do something or what I
@@ -27,7 +27,7 @@ export default function Notes({ notes }) {
         </p>
         <ul>
           {notes.map((n) => {
-            const { title, date, slug } = n.frontmatterPro;
+            const { title, date, slug } = n.frontmatter;
             return (
               <li key={slug}>
                 <Link href={`/notes/${slug}`}>

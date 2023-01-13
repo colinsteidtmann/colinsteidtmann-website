@@ -12,7 +12,8 @@
       "@/public/*": ["public/*"],
       "@/styles/*": ["src/styles/*"],
       "@/plugins/*": ["plugins/*"],
-      "@/scripts/*": ["scripts/*"]
+      "@/scripts/*": ["scripts/*"],
+      "@/hooks/*": ["src/hooks/*"]
     }
   }
 }

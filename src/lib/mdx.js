@@ -3,6 +3,7 @@ import { bundleMDX } from "mdx-bundler";
 import { getFrontmatterPro } from "./files";
 import remarkTocHeadings from "plugins/remark-toc-headings";
 import remarkMdxImages from "remark-mdx-images";
+import rehypeSlug from "rehype-slug-custom-id";
 const root = process.cwd();
 
 // run esbuild for specific markdown files to compile them in JSX fragment
@@ -47,7 +48,9 @@ export async function mdxBundle(slug) {
         remarkMdxImages,
         [remarkTocHeadings, { exportRef: toc }],
       ];
-      options.rehypePlugins = [...(options.rehypePlugins ?? [])];
+      options.rehypePlugins = [...(options.rehypePlugins ?? []),
+      [rehypeSlug, { maintainCase: false }]
+      ];
 
       return options;
     },
@@ -60,5 +63,5 @@ export async function mdxBundle(slug) {
     },
   });
 
-  return { code, frontmatterPro: getFrontmatterPro(slug, frontmatter), toc };
+  return { code, frontmatter: getFrontmatterPro(slug, frontmatter, toc) };
 }

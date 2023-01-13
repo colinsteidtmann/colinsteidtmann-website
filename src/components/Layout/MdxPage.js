@@ -1,13 +1,15 @@
+import { format } from "date-fns";
 import TableOfContents from "../MDX/TableOfContents";
 import NextAndPrevious from "./NextAndPrevious";
 
 export default function MdxPage({ children, frontmatter }) {
-    const { title, date, toc } = frontmatter;
+    let { title, date, toc } = frontmatter;
+    date = new Date(date);
     return (
-        <article>
+        <article className="prose mx-auto">
             <h1>{title}</h1>
-            <p><time dateTime={date.getDate()}>{date.getMonth()}, {date.getMonth()}</time></p>
-            <TableOfContents toc={toc} />
+            <p><time dateTime={date}>{format(date, "MMM, yyyy")}</time></p>
+            {/* <TableOfContents toc={toc} /> */}
             <section>
                 {children}
             </section>

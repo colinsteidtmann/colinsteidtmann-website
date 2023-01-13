@@ -2,11 +2,12 @@ import Link from "next/link";
 
 export default function NextAndPrevious({ frontmatter }) {
     const { nextFile, prevFile } = frontmatter;
-
     return (
         <div>
-            <Link href={`/notes/${prevFile.slug}`}>{'< '} {prevFile.title}</Link>
-            <Link href={`/notes/${nextFile.slug}`}>{'< '} {nextFile.title}</Link>
+            {prevFile && <Link href={`/notes/${prevFile.frontmatter.slug}`}>{'< '} {prevFile.frontmatter.title}</Link>}
+            {nextFile && <Link href={`/notes/${nextFile.frontmatter.slug}`}>
+                {nextFile.frontmatter.title} {'> '}
+            </Link>}
         </div>
     );
     // previous button on left
