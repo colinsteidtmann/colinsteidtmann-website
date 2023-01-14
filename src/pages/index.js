@@ -14,6 +14,7 @@ export default function Home() {
         description={siteMetadata.description}
         ogType="website"
       />
+      {/* A centered display block with my name, about, notes */}
       <div className="grid h-screen place-items-center text-center prose mx-auto">
         <div>
           <h1 className="mb-5">colin steidtmann</h1>

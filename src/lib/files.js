@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import matter from "gray-matter";
 import { sortDesc } from "./utils";
+import { getUnixTime } from "date-fns";
 
 const root = process.cwd();
 export const notesDir = path.join(root, "src", "content", "notes");
@@ -15,11 +16,11 @@ export function getSlugs() {
 
 // make frontmatter uniform for all files
 export function getFrontmatterPro(slug, frontmatter, toc) {
-    const today = new Date().toISOString();
+    const today = Number(getUnixTime(new Date()) * 1000);
     frontmatter.date &&
-        (frontmatter.date = new Date(frontmatter.date).toISOString());
+        (frontmatter.date = Number(getUnixTime(new Date(frontmatter.date))) * 1000);
     frontmatter.lastmod &&
-        (frontmatter.lastmod = new Date(frontmatter.date).toISOString());
+        (frontmatter.lastmod = Number(getUnixTime(new Date(frontmatter.date))));
     const defaultReturn = {
         slug: slug,
         title: "Default title",

@@ -1,14 +1,12 @@
-import { extendFrontMatter, getAllFiles, getNextAndPrev, getSlugs } from "@/lib/files";
+import { getAllFiles, getNextAndPrev, getSlugs } from "@/lib/files";
 import { NoteSEO } from "@/components/SEO";
 import siteMetadata from "@/data/siteMetadata";
-import MdxLayout from "@/components/MdxLayout";
-import { formatDate } from "@/lib/utils";
 import { mdxBundle } from "@/lib/mdx";
 import { useMemo } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 import { useMDXComponents } from "@mdx-js/react";
-import TableOfContents from "@/components/MDX/TableOfContents";
-import MdxPage from "@/components/Layout/MdxPage";
+import CommonLayout from "@/components/Layout/CommonLayout";
+import MdxArticle from "@/components/Layout/MdxArticle";
 // At build time, generate a map of all possible paths
 export async function getStaticPaths() {
   const slugs = getSlugs();
@@ -51,9 +49,11 @@ export default function SpecificNote({ code, frontmatter }) {
         keywords={keywords}
         url={`${siteMetadata.siteUrl}/notes/${slug}/`}
       />
-      <MdxPage frontmatter={frontmatter}>
-        <Component toc={toc} />
-      </MdxPage>
+      <CommonLayout backUrl="/notes" backName="Notes">
+        <MdxArticle frontmatter={frontmatter}>
+          <Component toc={toc} />
+        </MdxArticle>
+      </CommonLayout>
     </>
   );
 }

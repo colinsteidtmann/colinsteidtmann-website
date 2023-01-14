@@ -2,9 +2,8 @@ import { format } from "date-fns";
 import TableOfContents from "../MDX/TableOfContents";
 import NextAndPrevious from "./NextAndPrevious";
 
-export default function MdxPage({ children, frontmatter }) {
+export default function MdxArticle({ children, frontmatter }) {
     let { title, date, toc } = frontmatter;
-    date = new Date(date);
     return (
         <article className="prose mx-auto">
             <h1>{title}</h1>
