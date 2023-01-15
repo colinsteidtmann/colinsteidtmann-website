@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 export default function CommonLayout({ children, backUrl = "/", backName = "Home", noBack = false }) {
@@ -11,6 +12,7 @@ export default function CommonLayout({ children, backUrl = "/", backName = "Home
                 {/* Children */}
                 {children}
             </div>
+            <Footer />
         </div>
     );
 }

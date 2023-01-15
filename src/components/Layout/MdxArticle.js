@@ -9,10 +9,11 @@ export default function MdxArticle({ children, frontmatter }) {
             <h1>{title}</h1>
             <p><time dateTime={date}>{format(date, "MMM, yyyy")}</time></p>
             {/* <TableOfContents toc={toc} /> */}
-            <section>
+            <section className="not-prose">
                 {children}
             </section>
             <NextAndPrevious frontmatter={frontmatter} />
+
         </article>
     );
     // Title

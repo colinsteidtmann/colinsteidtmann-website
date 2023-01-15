@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@code-hike/mdx/dist/index.css";
 import { Analytics } from "@vercel/analytics/react";
 import { MDXProvider } from "@mdx-js/react";
 import { MDXComponents } from "@/components/MDX/MDXComponents";

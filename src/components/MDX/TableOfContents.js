@@ -16,10 +16,10 @@ export default function TableOfContents({ toc }) {
     }, [activeID]);
 
     return (
-        <div className={"fixed bottom-0 mx-auto max-h-[50%] w-full overflow-auto bg-white"} >
+        <nav className={"sticky bottom-0 mx-auto max-h-[50%] w-full overflow-auto bg-white"} >
             <h2>Table of Contents</h2>
             <NestedList toc={toc} activeID={activeID} linkRef={linkRef} />
-        </div>
+        </nav>
     );
     // Title (Table of Contents)
     // bullet list that has a link to each header in the table of contents

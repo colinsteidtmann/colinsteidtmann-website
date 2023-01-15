@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import InlineCode from "./InlineCode";
+// import InlineCode from "./InlineCode";
 import TableOfContents from "./TableOfContents";
+import Sandbox from "./Sandbox";
 
 const IMG = (props) => {
   return (
@@ -27,7 +28,6 @@ const PRE = (props) => {
 export const MDXComponents = {
   a: LINK,
   img: IMG,
-  code: InlineCode,
-  pre: PRE,
   TableOfContents,
+  Sandbox,
 };

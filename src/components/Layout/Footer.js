@@ -1,6 +1,8 @@
 
 export default function Footer() {
-    // just some extra whitespace
+    return (
+        <div className="h-16" />
+    );
 }
 
 /*

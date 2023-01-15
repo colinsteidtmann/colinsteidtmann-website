@@ -4,6 +4,9 @@ import { getFrontmatterPro } from "./files";
 import remarkTocHeadings from "plugins/remark-toc-headings";
 import remarkMdxImages from "remark-mdx-images";
 import rehypeSlug from "rehype-slug-custom-id";
+const { remarkCodeHike } = require("@code-hike/mdx");
+const theme = require("shiki/themes/github-dark.json"); // any theme from shiki
+
 const root = process.cwd();
 
 // run esbuild for specific markdown files to compile them in JSX fragment
@@ -45,8 +48,16 @@ export async function mdxBundle(slug) {
       // plugins in the future.
       options.remarkPlugins = [
         ...(options.remarkPlugins ?? []),
-        remarkMdxImages,
+
         [remarkTocHeadings, { exportRef: toc }],
+        remarkMdxImages,
+        [remarkCodeHike, {
+          lineNumbers: false,
+          showCopyButton: true,
+          theme: theme,
+          staticMediaQuery: "not screen, (max-width: 768px)",
+          autoImport: true,
+        }],
       ];
       options.rehypePlugins = [...(options.rehypePlugins ?? []),
       [rehypeSlug, { maintainCase: false }]

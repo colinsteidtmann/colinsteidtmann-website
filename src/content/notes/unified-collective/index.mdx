@@ -8,8 +8,6 @@ draft: false
 keywords: "mdx"
 ---
 
-<TableOfContents toc={props.toc} />
-
 Textual content is everywhere: websites, notes, books, emails, presentations, and developer documentation. It's just presented differently.
 
 It all has a similar structure: Headers, sub-headers, paragraphs, **bolded** and _italicized_ _words_, lists, tables, images, and links. The tool you use just may be different.
@@ -322,3 +320,5 @@ Learning about MDX and specifically how to process it on-demand forced me to div
 I learned about abstract syntax trees (great [AST visualizer](https://astexplorer.net/)), how to build a [simplified bundler](https://github.com/ronami/minipack), and came across new, to me, JavaScript [syntax](<(https://github.com/mdx-js/mdx/blob/main/packages/mdx/lib/run.js#L15)>) - `new AsyncFunction(String(file))(options)` - and JavaScript packages ([`string_decoder`](https://github.com/kentcdodds/mdx-bundler/blob/main/src/index.js#L3), [`Reflect`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/construct)) that I had to [parse](https://nodejs.org/dist/v8.9.4/docs/api/string_decoder.html) or [ask the community](https://github.com/mdx-js/mdx/discussions/2202).
 
 Overall, it was a fun way to spend a week of my Christmas break.
+
+<TableOfContents toc={props.toc} />
