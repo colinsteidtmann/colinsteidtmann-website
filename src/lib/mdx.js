@@ -51,13 +51,13 @@ export async function mdxBundle(slug) {
 
         [remarkTocHeadings, { exportRef: toc }],
         remarkMdxImages,
-        [remarkCodeHike, {
-          lineNumbers: false,
-          showCopyButton: true,
-          theme: theme,
-          staticMediaQuery: "not screen, (max-width: 768px)",
-          autoImport: true,
-        }],
+        // [remarkCodeHike, {
+        //   lineNumbers: false,
+        //   showCopyButton: true,
+        //   theme: theme,
+        //   staticMediaQuery: "not screen, (max-width: 768px)",
+        //   autoImport: true,
+        // }],
       ];
       options.rehypePlugins = [...(options.rehypePlugins ?? []),
       [rehypeSlug, { maintainCase: false }]

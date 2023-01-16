@@ -1,5 +1,7 @@
 
-export default function CodeBlock({ children }) {
+export default function CodeBlock(props) {
+    console.log(props);
+    return (<code {...props} />);
     // Static and syntax highlighted code
 }
 
