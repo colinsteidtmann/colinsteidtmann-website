@@ -29,7 +29,7 @@ const PRE = (props) => {
 export const MDXComponents = {
   a: LINK,
   img: IMG,
-  pre: CodeBlock,
   TableOfContents,
   Sandbox,
+  pre: CodeBlock
 };
