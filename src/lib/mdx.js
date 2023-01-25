@@ -4,11 +4,9 @@ import { getFrontmatterPro } from "./files";
 import remarkTocHeadings from "plugins/remark-toc-headings";
 import remarkMdxImages from "remark-mdx-images";
 import rehypeSlug from "rehype-slug-custom-id";
-import pluginExample from "@/plugins/plugin-example";
 import rehypePrettyCode from "rehype-pretty-code";
 import { codeImport } from "remark-code-import";
-const { remarkCodeHike } = require("@code-hike/mdx");
-const theme = require("shiki/themes/github-dark.json"); // any theme from shiki
+import rehypeMetaAsAttributes from "@/plugins/rehypeMetaAsAttributes";
 
 const root = process.cwd();
 
@@ -54,11 +52,13 @@ export async function mdxBundle(slug) {
 
         [remarkTocHeadings, { exportRef: toc }],
         remarkMdxImages,
-        codeImport
+        codeImport,
       ];
-      options.rehypePlugins = [...(options.rehypePlugins ?? []),
-      [rehypeSlug, { maintainCase: false }],
-      [rehypePrettyCode, { theme: "github-dark", keepBackground: true }]
+      options.rehypePlugins = [
+        ...(options.rehypePlugins ?? []),
+        [rehypeMetaAsAttributes],
+        [rehypeSlug, { maintainCase: false }],
+        [rehypePrettyCode, { theme: "github-dark", keepBackground: true }],
       ];
 
       return options;

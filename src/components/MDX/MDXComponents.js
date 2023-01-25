@@ -20,16 +20,16 @@ const LINK = (props) => {
   return <Link {...customProps} />;
 };
 
-const PRE = (props) => {
-  return (
-    <pre className="rounded-lg bg-white shadow-lg text-black" {...props} />
-  );
-};
+// const PRE = (props) => {
+//   return (
+//     <pre className="rounded-lg bg-white shadow-lg text-black" {...props} />
+//   );
+// };
 
 export const MDXComponents = {
   a: LINK,
   img: IMG,
   TableOfContents,
   Sandbox,
-  pre: CodeBlock
+  pre: CodeBlock,
 };

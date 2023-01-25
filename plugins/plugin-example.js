@@ -6,11 +6,11 @@ import { is } from "unist-util-is";
 // small utility for checking node types:
 
 export default function pluginExample() {
-    return (tree, file) => {
-        // visit all ParagraphNodes (node names specified under mdast: https://github.com/syntax-tree/mdast)
-        visit(tree, 'paragraph', (node) => {
-            console.log(node);
-            /*
+  return (tree, file) => {
+    // visit all ParagraphNodes (node names specified under mdast: https://github.com/syntax-tree/mdast)
+    visit(tree, "paragraph", (node) => {
+      console.log(node);
+      /*
             CONSOLE OUTPUTS:
             {
                 type: 'ParagraphNode',
@@ -37,23 +37,23 @@ export default function pluginExample() {
                 }
                 }
             */
-            const children = node.children;
-            children.forEach((child, index) => {
-                if (
-                    is(children[index - 1], 'SentenceNode') &&
-                    is(child, 'WhiteSpaceNode') &&
-                    is(children[index + 1], 'SentenceNode')
-                ) {
-                    console.log(child);
-                    if (child.value.length !== 1) {
-                        file.message(
-                            'Expected 1 space between sentences, not ' + child.value.length,
-                            child
-                        );
-                    }
-                }
-            });
-            /* CONSOLE OUTPUTS
+      const children = node.children;
+      children.forEach((child, index) => {
+        if (
+          is(children[index - 1], "SentenceNode") &&
+          is(child, "WhiteSpaceNode") &&
+          is(children[index + 1], "SentenceNode")
+        ) {
+          console.log(child);
+          if (child.value.length !== 1) {
+            file.message(
+              "Expected 1 space between sentences, not " + child.value.length,
+              child
+            );
+          }
+        }
+      });
+      /* CONSOLE OUTPUTS
                 {
                     type: 'WhiteSpaceNode',
                     value: ' ',
@@ -75,10 +75,9 @@ export default function pluginExample() {
 
                 ⚠ 1 warning
             */
-        });
-    };
+    });
+  };
 }
-
 
 // unisst-util-visit: https://unifiedjs.com/explore/package/unist-util-visit/
 /**

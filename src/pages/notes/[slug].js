@@ -34,7 +34,8 @@ export async function getStaticProps({ params }) {
 
 // Renders page for a specific note
 export default function SpecificNote({ code, frontmatter }) {
-  const { title, date, lastmod, slug, description, keywords, toc } = frontmatter;
+  const { title, date, lastmod, slug, description, keywords, toc } =
+    frontmatter;
   const Component = useMemo(
     () => getMDXComponent(code, { mdxComponents: { useMDXComponents } }),
     [code]

@@ -2,12 +2,9 @@ import Link from "next/link";
 import useObserver from "@/hooks/useObserver";
 import { useEffect, useRef } from "react";
 
-const desktopClasses = "fixed right-10 top-10";
-const mobile = "";
 
 export default function TableOfContents({ toc }) {
     const linkRef = useRef(null);
-    const containerRef = useRef(null);
     const headingIDs = toc.map((tocItem) => tocItem.url);
     const { activeID } = useObserver({ elementIDs: headingIDs });
 
@@ -27,7 +24,7 @@ export default function TableOfContents({ toc }) {
 
 // Recursive function for nested lists
 function NestedList({ toc, activeID, linkRef }) {
-    let map = new Map();
+    let map = new Map(); // eslint-disable-line
     const depth = toc[0].depth;
     for (let i = 0; i < toc.length; i++) {
         if (toc[i].depth > depth) continue; // don't render what the recursive function takes care of

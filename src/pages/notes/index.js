@@ -2,13 +2,12 @@ import Link from "next/link";
 import { getAllFiles } from "@/lib/files";
 import { PageSEO } from "@/components/SEO";
 import CommonLayout from "@/components/Layout/CommonLayout";
-import { format, formatISO, getUnixTime } from "date-fns";
+import { format, formatISO } from "date-fns";
 
 // get all frontmatter for files during build time
 export async function getStaticProps() {
   const notes = getAllFiles();
   return { props: { notes } };
-
 }
 
 // use array [{frontmatterPro, content}] to show notes nav during runtime
@@ -31,10 +30,10 @@ export default function Notes({ notes }) {
             const { title, date, slug } = n.frontmatter;
             return (
               <li key={slug}>
-                <Link href={`/notes/${slug}`}>
-                  {title}
-                </Link>
-                <time className="mx-3 no-underline" dateTime={formatISO(date)}>{format(date, "MMM yyyy")}</time>
+                <Link href={`/notes/${slug}`}>{title}</Link>
+                <time className="mx-3 no-underline" dateTime={formatISO(date)}>
+                  {format(date, "MMM yyyy")}
+                </time>
               </li>
             );
           })}

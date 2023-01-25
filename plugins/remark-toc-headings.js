@@ -12,7 +12,7 @@ export default function remarkTocHeadings(options) {
         textContent: textContent,
         url: "#" + slug(textContent),
         depth: node.depth,
-        index: index
+        index: index,
       });
     });
 }
