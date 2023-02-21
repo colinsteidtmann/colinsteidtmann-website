@@ -1,0 +1,89 @@
+---
+title: Can Zero-Knowledge-Proofs Protect User Privacy?
+description: All about zk-proofs
+date: 2/20/2023
+tags: []
+lastmod: 2/20/2023
+---
+
+&nbsp;&nbsp;&nbsp; Ask yourself: Does your favorite social media company need to know your birth date?
+No! They will argue that they need to verify your age, such as 13, to which I will
+respond by informing them of a technology called "zero-knowledge proofs" that lets
+their users prove just what the companies _need_ to know (being above the age of 13) without revealing anything else (such as actual birthdate, name, or address).
+The internet has undergone a series of changes. First, it was a one-way street with
+businesses presenting information to consumers. Then it became interactive as users
+signed up for services like Facebook and stored personal information (such as email,
+passwords, name, and address) in their data centers. Once data collection reached
+large volumes, became more complex, and was shared/sold with growing velocity, it
+was described as "big data." In came the "data wranglers" to wrangle the data with
+machine learning and extract profits from users. Now we are left with numerous business
+models that would not exist if it were not so easy to metaphorically walk around
+with a clipboard and follow millions of people 24/7, jotting down their every thought,
+action, and revealed interests. If you want to be in control of your data and privacy,
+then pay attention to zero-knowledge proofs, which academics from top universities
+like UC Berkeley hope will bring a new privacy layer to the internet that walls off
+companies tracking you and their disingenuous business models.
+
+### What are zero-knowledge proofs?
+
+&nbsp;&nbsp;&nbsp; Zero-knowledge proofs let you make assertions and prove them without revealing anything but the claim itself. It is as if every question was a yes/no or multiple choice, and you just had to bubble in your answer without showing your work. Where can this be used? Everywhere, maybe? Every website likes to verify your identity by having you type in a username and password, but imagine the login screen being yes/no: are you Alice, yes or no? As Howard Wu writes in his article,
+
+> "With zero-knowledge proofs, however, users can now hash their password on-device, that is, without ever having to send their password to any web service. Imagine never having your password compromised again because of others’ errors, bad actors, or reasons beyond your control."
+
+Beyond passwords, many people also care about keeping their finances and health data private. Today, when you rent or buy a home, real estate agents ask for complete bank account info and recent paychecks to check if you meet a minimum qualifying income. Later, they can use this data to send targeted ads whether or not you made a transaction with them. Alternatively, zero-knowledge proofs would just let you check the box: do you meet this minimum income requirement, yes/no? While they seem magical, we’ll now begin to better understand how they work.
+
+### How zero-knowledge proofs work
+
+&nbsp;&nbsp;&nbsp; Zero-Knowledge proofs were first introduced in 1985 by a UC Berkeley researcher and Turing award winner, Shafi Goldwasser, and her colleagues in their paper “The Knowledge Complexity of Interactive Systems.” One of the earliest descriptions of how they work comes from a real-world situation; Carlos is a non-colorblind person who needs to prove that he’s not colorblind to a friend. One way to do this is for the friend to get medical records from Carlos’s doctor, however, Carlos doesn’t want to share his sensitive health records. Instead, the friend holds two markers of different colors behind their back. The friend then reveals one marker to Carlos, puts it behind their back again, then switches or doesn’t switch the markers before revealing the marker again and asking Carlos if it’s the same marker. They’ll repeat this until the friend is convinced that Carlos isn’t colorblind. This type of proof is called an “interactive proof,” one of the first iterations of a proof-generating protocol.
+
+### Digital interactive zero-knowledge proofs
+
+&nbsp;&nbsp;&nbsp; In the digital world, zero-knowledge proofs work pretty much the same way but with a bit more math and cryptography backing them. Suppose there’s an online Sudoku competition happening and Alice finds a solution that will lead to a prize and she wants to prove it to judges and other participants without revealing it. Sudoku is a game where there’s a gridded board with some cells filled in and some cells aren't, and the challenge is to fill in all the grid cells without violating the game's rules. The interactive zero-knowledge proof is a multi-step process:
+
+1. Alice creates a random “permutation” of her solution, each value 0-9 is mapped to a new unique value. She can’t send this permuted board over because then people might be able to derive all the original values.
+2. Alice then assigns each cell a random “nonce” which is a few random letters.
+3. Each cell’s nonce and permuted value get “hashed” (combined) into a new random string of letters that could only be produced by the permuted value and its nonce.
+4. Finally, Alice sends the entire board of hashed values to the judges. The judges can’t derive the permuted values (and then the entire solution) because hash functions are one-way.
+5. Instead, the judges can only ask Alice one question: reveal the permuted values and their nonces of some row, column, or subgrid, and the permuted values of a few other cells that were present on the unsolved sudoku puzzle. If Alice’s solution is _likely_ to be correct, then:
+   - No row, column, or subgrid can contain duplicate values.
+   - The nonce for each cell and the permuted value should hash to the same hashes on the hashed board they received.
+   - If the original sudoku board had an, eg. “1”, value in the row that the judges selected and a “1” value in the random cell they selected, then the permuted values should both be the same; this would mean that Alice’s permuted board is consistent.
+6. If step 5 went well, then Alice and the judges can repeat all the previous 5 steps until the judges are convinced that she has a solution and can award her the prize.
+
+A pictorial writeup for this was written by Manish Goregaokar, who also created an interactive game and demonstration for it that readers can [check out](https://manishearth.github.io/sudoku-zkp/zkp.html).
+
+### Non-interactive zero-knowledge proofs
+
+&nbsp;&nbsp;&nbsp; This brings us to today, instead of interactive zero-knowledge proofs which aren’t practical or efficient in the real world, there are now \_non-interactive \_zero-knowledge proofs. As the [Ethereum ](https://ethereum.org/en/zero-knowledge-proofs)Foundation explains,
+
+> “While revolutionary, interactive proving had limited usefulness since it required the two parties to be available and interact repeatedly. Even if a verifier was convinced of a prover’s honesty, the proof would be unavailable for independent verification (computing a new proof required a new set of messages between the prover and verifier).
+
+> To solve this problem, Manuel Blum, Paul Feldman, and Silvio Micali suggested the first non-interactive zero-knowledge proofs where the prover and verifier have a shared key. This allows the prover to demonstrate their knowledge of some information (i.e., witness) without providing the information itself.”
+
+Illustrating this non-interactive zero-knowledge protocol, we can again use the Sudoku example. The protocol, a third-party, would provide Alice and the competition judges with their own “key,” a string of random letters and numbers. Alice uses her key to hash /mask her solution and she sends it to the judges in one message. The judges then use their special verification key to verify it. While it sounds simple, there are years of academic research in math and cryptography that led to it. However, there are still hurdles to overcome as zero-knowledge proofs can’t be trivially applied to any ordinary problem. Information that would usually be shared to prove a statement or answer yes/no questions needs to be translated by cryptographers into code and math that lets users encrypt it on their end and have it verified on the verifier's end. At the moment, this requires nearly unique zero-knowledge protocols for every unique problem, which explains why there are so many zero-knowledge protocols and research papers. Working to address this is the [ZKProof Standards](https://zkproof.org/) institute.
+
+### Critics
+
+&nbsp;&nbsp;&nbsp; Not all are so bullish on zero-knowledge-proof technology and encryption that protects user privacy. As New York Times journalist Ali Asaei writes about the messaging app Signal, an app that uses end-to-end encryption and had its founder Jack Dorsey state that they’d never and couldn’t reveal user messages, even if law enforcement asked,
+
+> “I [Ali] am drawing attention to Signal, but there’s a bigger issue here: Small groups of technologists are developing and deploying applications of their technologies for explicitly ideological reasons, with those ideologies baked into the technologies. To use those technologies is to use a tool that comes with an ethical or political bent. (…) Whether law enforcement should tap our phones on the condition that a warrant is obtained is, at the very least, worthy of public discussion. Signal has unilaterally decided for us all.”
+
+Asei’s argument is reasonable, zero-knowledge proofs may lead to a world where people have too much privacy and can conduct illegal activities without being caught. Therefore, like any new technology, we need to weigh the costs and benefits and preemptively mitigate any problems that we can foresee. Artificial intelligence has to do the same, so does online gambling, and so did cars and airplanes when they were first introduced. I’m bullish on zero-knowledge proofs because we’ve had years of regulations like GDPR and California’s Online Privacy Act that have tried to protect our online privacy but have failed. After all, they don’t address the root problem and don’t have the resources to verify every company is following the rules. Zero-knowledge proofs address the root problem: they put us in control and let us share the precise information we choose to share and nothing more.
+
+#### References
+
+> Asaei, Ali. “Opinion | Jack Dorsey and the Dangers of Privacy at All Costs - the New York Times.” _Web.archive.org_, 1 Jan. 2023, web.archive.org/web/20230101194846/www.nytimes.com/2022/12/28/opinion/jack-dorseys-twitter-signal-privacy.html. Accessed 21 Feb. 2023.
+
+> BBVA. “Zero Knowledge Proof: How to Maintain Privacy in a Data-Based World.” _NEWS BBVA_, 11 Sept. 2019, www.bbva.com/en/zero-knowledge-proof-how-to-maintain-privacy-in-a-data-based-world/.
+
+> “Homepage.” _ZKProof Standards_, zkproof.org/.
+
+> “Interactive Sudoku Prover.” _Manishearth.github.io_, manishearth.github.io/sudoku-zkp/zkp.html. Accessed 21 Feb. 2023.
+
+> “Privacy-Protecting Regulatory Solutions Using Zero-Knowledge Proofs: Full Paper.” _A16z Crypto_, 16 Nov. 2022, a16zcrypto.com/privacy-protecting-regulatory-solutions-using-zero-knowledge-proofs-full-paper/. Accessed 21 Feb. 2023.
+
+> “Why Zero-Knowledge KYC Won’t Work.” _Cointelegraph_, cointelegraph.com/news/why-zero-knowledge-kyc-won-t-work. Accessed 21 Feb. 2023.
+
+> Wu, Howard. “How the Coming Privacy Layer Will Fix the Broken Web.” _Future_, 15 June 2021, future.com/a-privacy-layer-for-the-web-can-change-everything/. Accessed 21 Feb. 2023.
+
+> “Zero-Knowledge Proofs.” _Ethereum.org_, ethereum.org/en/zero-knowledge-proofs/.
